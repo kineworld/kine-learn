@@ -118,6 +118,13 @@ def check_index(problems: Problems) -> dict:
         if stage.get("id") not in STAGE_PREFIX:
             problems.add(f"curriculum/_index.yaml 学段 {stage.get('id')}",
                          f"未在 STAGE_PREFIX 登记，知识点 id 前缀无法校验")
+        # refined 必须显式写出来。省掉它，四个月后就没人记得"这个学段到底精写过没有"，
+        # 而默认值无论取哪一边都会让某一种解读变成错的。
+        if not isinstance(stage.get("refined"), bool):
+            problems.add(f"curriculum/_index.yaml 学段 {stage.get('id')}",
+                         "refined 必须是 true 或 false（显式写出，别省略）："
+                         "它声明该学段的主干是否已逐条精写。标 true 会立刻要求"
+                         "该学段每条主干都填 from 或 axiom")
     for s in index.get("strands") or []:
         for field in ("id", "name", "question"):
             if not _nonempty(s.get(field)):
@@ -363,6 +370,82 @@ def coverage_report(stages: list[dict]) -> list[str]:
 # CONTRIBUTING.md 那条"加了检查就要能说明它为什么能变红"——
 # 新加一个检查却忘了给它写一条能弄红它的用例，会在那里被拦下，
 # 而不是等到某天这个检查默默失效、没人发现。
+def find_derivation_cycles(by_id: dict) -> list[list[str]]:
+    """找出 from 边构成的环，每条环路返回成 id 列表（首尾同一个 id）。
+
+    为什么环是缺陷：`from` 的含义是"比这一条更基本"。这个关系一旦绕回自己，
+    链条上就出现了"A 比 B 更基本、B 比 A 更基本"这种谁也不成立的陈述——
+    它读起来仍然像一句原理，只是什么也没说。
+
+    用灰白黑三色深度优先，O(点数)：链最长也就一百多层，不会爆栈。
+    """
+    WHITE, GREY, BLACK = 0, 1, 2
+    color = dict.fromkeys(by_id, WHITE)
+    stack: list[str] = []
+    cycles: list[list[str]] = []
+
+    def visit(pid: str) -> None:
+        color[pid] = GREY
+        stack.append(pid)
+        nxt = by_id[pid].get("from")
+        if isinstance(nxt, str) and nxt in by_id and nxt != pid:
+            if color[nxt] == GREY:
+                cycles.append(stack[stack.index(nxt):] + [nxt])
+            elif color[nxt] == WHITE:
+                visit(nxt)
+        stack.pop()
+        color[pid] = BLACK
+
+    for pid in by_id:
+        if color[pid] == WHITE:
+            visit(pid)
+    return cycles
+
+
+def check_derivation_chain(problems: Problems, index: dict) -> None:
+    """检查推导链的结构：引用有效、不自指、axiom 与 from 互斥、无环、该填的填了。
+
+    这条对应 ROADMAP 阶段二的出口标准之一（principle 要能指出从哪条更基本的事实
+    推出）。它**只**保证链条的结构成立，保证不了推导本身讲得对——那是人的事。
+    另一半靠得住的地方在于：`refined: true` 是学段的公开声明，
+    声明了却填不出推导，CI 直接红。
+
+    它还拦不住一种绕法：把所有主干都标成 `axiom: true`。这条路能过检查，
+    但覆盖表会显示"公理数 / 主干数"，一整段全是公理时那个数字自己就会说话。
+    """
+    points = iter_points(skip_missing=True)
+    by_id = {p["id"]: p for p in points if p.get("id")}
+    refined = {s["id"] for s in index.get("stages") or [] if s.get("refined")}
+
+    for p in points:
+        pid = p.get("id")
+        where = f"curriculum/ :: {pid}"
+        source = p.get("from")
+        axiom = p.get("axiom")
+
+        if axiom not in (True, False, None):
+            problems.add(where, "axiom 只能是 true，或干脆不写")
+        if source is not None:
+            if not isinstance(source, str) or not source.strip():
+                problems.add(where, "from 是空的。要么填一个知识点 id，要么改用 axiom: true")
+            elif source == pid:
+                problems.add(where, "from 指向自己：一条原理不能从它自己推出来")
+            elif source not in by_id:
+                problems.add(where, f"from 引用了不存在的知识点：{source}")
+        if axiom is True and source:
+            problems.add(where, "axiom 与 from 不能同时出现："
+                                "标成「给定的事实」的条目，就不再从别处推出")
+
+        if (p["stage_id"] in refined and p.get("core")
+                and not source and axiom is not True):
+            problems.add(where, "所属学段已标 refined，但这条主干既没有 from 也没有 "
+                                "axiom：说不出它从哪条更基本的事实推出，"
+                                "或者就该承认它是起点")
+
+    for path in find_derivation_cycles(by_id):
+        problems.add("curriculum/", "推导链成环（谁也不比谁更基本）：" + " → ".join(path))
+
+
 ALL_CHECKS = (
     "check_index",
     "check_stage_files",
@@ -374,6 +457,7 @@ ALL_CHECKS = (
     "check_oss",
     "check_oss_points_exist",
     "check_exit_is_an_action",
+    "check_derivation_chain",
 )
 
 
@@ -394,6 +478,7 @@ def run_all_checks() -> tuple[Problems, dict, list[dict]]:
     check_oss(problems)
     check_oss_points_exist(problems)
     check_exit_is_an_action(problems)
+    check_derivation_chain(problems, index)
     return problems, index, stages
 
 

@@ -57,6 +57,12 @@ def set_root(root) -> None:
 
 
 # 一个知识点必须齐备的字段。缺一个就不算写完，validate.py 会拦。
+#
+# 不在这里的另有两个可选字段，它们回答"这条原理从哪条更基本的事实推出"：
+#   from   引用另一个知识点的 id，表示这条是从它推出来的。
+#   axiom  true 表示这一条当作给定的事实，不再往下追问——推导链的起点。
+# 两者互斥。只有 _index.yaml 里标了 refined: true 的学段，才要求主干二选一填上；
+# 非主干两个都不要求（它们不承担骨架），但可以被主干引用。
 REQUIRED_POINT_FIELDS = (
     "id", "title", "grade", "kid", "principle", "model", "exit",
 )
@@ -201,24 +207,39 @@ def iter_points(skip_missing: bool = False) -> list[dict]:
 PARAGRAPH_MIN_CHARS = 120
 
 
+def refined_stages() -> set[str]:
+    """已在 _index.yaml 里标 refined: true 的学段 id。
+
+    只有这些学段的主干被要求填 from 或 axiom。分阶段的理由很实际：
+    要求 170 条主干一次填齐，结果一定是有人为了过检查而编造推导——
+    那比空着更糟，因为它看起来是核实过的。
+    """
+    return {s["id"] for s in load_index()["stages"] if s.get("refined")}
+
+
 def paragraph_stats(points: list[dict]) -> dict:
     """主干知识点的 principle 长度分布，用来回答"阶段二进行到哪了"。
 
     刻意返回分布（中位、最短、最长）而不是"合格 / 不合格"：
     合格与否取决于能不能读懂，不取决于字数。给一个二元结论，人就会去凑字数。
+
+    一并报出 axiom 的条数。这个数字本身不做判断，它的用处是难看：
+    把整段主干都标成"给定的事实"，链条就名存实亡，而"公理 19 / 主干 19"
+    摆进覆盖表以后，这件事没法悄悄发生。
     """
-    lengths = sorted(
-        len(" ".join((p.get("principle") or "").split()))
-        for p in points if p.get("core")
-    )
+    core = [p for p in points if p.get("core")]
+    lengths = sorted(len(" ".join((p.get("principle") or "").split())) for p in core)
+    axioms = sum(1 for p in core if p.get("axiom") is True)
     if not lengths:
-        return {"n": 0, "median": 0, "shortest": 0, "longest": 0, "paragraph": 0}
+        return {"n": 0, "median": 0, "shortest": 0, "longest": 0,
+                "paragraph": 0, "axiom": 0}
     return {
         "n": len(lengths),
         "median": lengths[len(lengths) // 2],
         "shortest": lengths[0],
         "longest": lengths[-1],
         "paragraph": sum(1 for n in lengths if n >= PARAGRAPH_MIN_CHARS),
+        "axiom": axioms,
     }
 
 

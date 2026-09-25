@@ -157,6 +157,13 @@ def render_point(point: dict, subject_id: str, strands: dict, resmap: dict) -> l
         "",
         f"- **一年级版**：{point['kid']}",
         f"- **第一性原理**：{' '.join(point['principle'].split())}",
+    ]
+    # 推导来源紧跟在原理后面：读者刚看完"它是什么"，下一个问题必然是"凭什么"。
+    if point.get("axiom") is True:
+        lines.append("- **推导起点**：这一条当作给定的事实，不再往下追问。")
+    elif point.get("from"):
+        lines.append(f"- **推出自**：`{point['from']}`（它比这一条更基本）")
+    lines += [
         f"- **与世界模型的连接**：{' '.join(point['model'].split())}",
         f"- **出口标准**：{' '.join(point['exit'].split())}",
     ]
@@ -409,27 +416,45 @@ def render_coverage() -> str:
         "[ROADMAP.md](../ROADMAP.md) 的阶段二要求每个主干知识点（`core: true`）都有一段"
         "能独立读懂的原理，而不是一句提纲。下表是离那个出口还有多远，数字同样现算。",
         "",
-        f"| 学段 | 主干 | principle 中位字数 | 最短 | 最长 "
-        f"| 已达段落长度（≥{floor} 字） |",
-        "| --- | --- | --- | --- | --- | --- |",
+        f"| 学段 | 已精写 | 主干 | principle 中位字数 | 最短 | 最长 "
+        f"| 已达段落长度（≥{floor} 字） | 标为推导起点（axiom） |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
-    for row in per_stage_para:
-        lines.append(f"| {row['name']} | {row['n']} | {row['median']} | "
-                     f"{row['shortest']} | {row['longest']} | {row['paragraph']} |")
-    lines.append(f"| **合计** | **{para['n']}** | **{para['median']}** | "
+    for row, stage in zip(per_stage_para, stages):
+        lines.append(f"| {row['name']} | {'是' if stage.get('refined') else '否'} "
+                     f"| {row['n']} | {row['median']} | {row['shortest']} | "
+                     f"{row['longest']} | {row['paragraph']} | {row['axiom']} |")
+    lines.append(f"| **合计** | — | **{para['n']}** | **{para['median']}** | "
                  f"{para['shortest']} | {para['longest']} | "
-                 f"**{para['paragraph']} / {para['n']}** |")
+                 f"**{para['paragraph']} / {para['n']}** | **{para['axiom']}** |")
     lines += [
         "",
         "**字数只是下限的影子，不是判据。** 真正的判据是那条原理有没有指出"
         "「它从哪条更基本的事实推出」，这件事脚本判不了，只能靠人读。所以上表"
         "只报数、不拦构建——拿字数当门槛，结果一定是有人往句子里灌水。",
         "",
-        f"当前数字说明阶段二**还没动笔**：{para['n']} 条主干的中位长度是 "
-        f"{para['median']} 字，最长的也只有 {para['longest']} 字。"
-        "现有写法是浓缩的一句话，方向立得住，但撑不起「独立读懂」——"
-        "缺的是从更基本的事实推到结论中间那几步。",
+        "「已精写」是 `curriculum/_index.yaml` 里每个学段的 `refined` 声明。"
+        "标了 `refined: true` 的学段，其每条主干必须填 `from`（从哪个知识点推出）"
+        "或 `axiom: true`（当作给定的事实），否则 `scripts/validate.py` 直接红——"
+        "**声明必须兑现**。非主干不受此要求约束。",
+        "",
+        "**「标为推导起点」那一列不做判断，它的用处是难看。** 把整段主干都标成"
+        "「给定的事实」，链条就名存实亡；而这个数字摆在这里，那种做法没法悄悄发生。"
+        "但它确实拦不住有人真这么做——这是这条检查的已知盲区。",
+        "",
     ]
+
+    # 阶段二第一段叙述要跟着数字变，不能写死一句"还没动笔"。
+    if para["paragraph"] == 0:
+        lines.append(f"当前数字说明阶段二**还没动笔**：{para['n']} 条主干的中位长度是 "
+                     f"{para['median']} 字，最长的也只有 {para['longest']} 字。"
+                     "现有写法是浓缩的一句话，方向立得住，但撑不起「独立读懂」——"
+                     "缺的是从更基本的事实推到结论中间那几步。")
+    else:
+        lines.append(f"当前进度：{para['n']} 条主干里 {para['paragraph']} 条已达段落长度，"
+                     f"中位 {para['median']} 字；其中 {para['axiom']} 条标为推导起点，"
+                     f"其余靠 `from` 指向更基本的那一条。字数是影子，真正的判据仍是"
+                     "「读一遍能不能顺着推导走完」——这一条只能由读过的人回答。")
     lines += [
         "",
         "## GitHub 在基础教育这一层是薄的：实测结论",
@@ -659,6 +684,11 @@ footer a{color:var(--accent)}
     h += '</div>';
     h += '<div class="f kid"><span class="k">一年级版</span>'+esc(p.kid)+'</div>';
     h += '<div class="f"><span class="k">第一性原理</span>'+esc(p.principle)+'</div>';
+    if(p.axiom){
+      h += '<div class="f"><span class="k">推导起点</span>当作给定的事实，不再往下追问</div>';
+    } else if(p.derived_from){
+      h += '<div class="f"><span class="k">推出自</span><code>'+esc(p.derived_from)+'</code></div>';
+    }
     h += '<div class="f model"><span class="k">与世界模型的连接</span>'+esc(p.model)+'</div>';
     h += '<div class="f exit"><span class="k">出口标准</span>'+esc(p.exit)+'</div>';
     if(p.prereq && p.prereq.length){
@@ -751,6 +781,8 @@ def build_html(resmap: dict) -> str:
             "strand": next((s["name"] for s in index["strands"] if s["id"] == p.get("strand")), ""),
             "kid": p["kid"],
             "principle": " ".join(p["principle"].split()),
+            "derived_from": p.get("from") or "",
+            "axiom": p.get("axiom") is True,
             "model": " ".join(p["model"].split()),
             "exit": " ".join(p["exit"].split()),
             "prereq": p.get("prereq") or [],

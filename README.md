@@ -45,6 +45,18 @@
 
 外加 `core`（是否主干）、`strand`（所属主线）、`prereq`（前置知识点）。
 
+主干知识点还要回答"这条原理从哪条更基本的事实推出"，用两个字段中的一个：
+
+| 字段 | 意思 | 约束 |
+| --- | --- | --- |
+| `from` | 从哪个知识点推出来，填它的 id | 必须指向真实存在、且不是自己的知识点 |
+| `axiom: true` | 到此为止，把这一条当作给定的事实 | 与 `from` 互斥 |
+
+`curriculum/_index.yaml` 里每个学段有一行 `refined: true / false`，声明该学段的
+主干是否已逐条精写。**标了 `true`，该学段每条主干就必须填上面两个字段之一，
+否则 `scripts/validate.py` 直接失败；`from` 组成环也会失败。** 当前进度见
+[`docs/COVERAGE.md`](docs/COVERAGE.md) 的「阶段二进度」表——那张表由脚本现算。
+
 八条主线是这套材料的骨：**number 数量** · **structure 结构** · **change 变化** ·
 **energy 能量** · **cause 因果** · **system 系统** · **symbol 符号** ·
 **scale 尺度**。每条主线有一个它负责回答的问题，见 [`docs/STRANDS.md`](docs/STRANDS.md)。

@@ -8,9 +8,16 @@ version: v0.1
 updated: 2026-09-25
 
 # ------------------------------------------------------------------ 学段
+#
+# refined: 这个学段的主干知识点是否已逐条精写。
+#   标 true 之后，validate.py 会要求该学段每条 core: true 的知识点都填上
+#   from（从哪个知识点推出）或 axiom: true（当作给定的事实）。
+#   反过来，一个学段只标 true 而不填这两个字段，CI 会直接红——声明必须兑现。
+#   非主干不受此要求约束。
 stages:
   - id: primary
     name: 小学
+    refined: true
     file: primary.yaml
     grades: 1-6 年级
     anchor: >
@@ -20,6 +27,7 @@ stages:
 
   - id: middle
     name: 初中
+    refined: false
     file: middle.yaml
     grades: 7-9 年级
     anchor: >
@@ -29,6 +37,7 @@ stages:
 
   - id: high
     name: 高中
+    refined: false
     file: high.yaml
     grades: 10-12 年级
     anchor: >
@@ -38,6 +47,7 @@ stages:
 
   - id: university
     name: 大学基础
+    refined: false
     file: university.yaml
     grades: 本科一至三年级
     anchor: >
@@ -47,6 +57,7 @@ stages:
 
   - id: language
     name: 语言（英语与中文）
+    refined: false
     file: language.yaml
     grades: 全学段并行
     anchor: >

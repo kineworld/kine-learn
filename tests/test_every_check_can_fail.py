@@ -45,12 +45,14 @@ INDEX = {
     "updated": "2026-09-25",
     "stages": [
         {"id": "primary", "name": "小学", "file": "primary.yaml",
-         "anchor": "从一个苹果开始"},
+         "refined": False, "anchor": "从一个苹果开始"},
     ],
     "subjects": {"math": {"name": "数学", "strand_hint": "number"}},
     "strands": [{"id": "number", "name": "数量", "question": "有多少个？"}],
 }
 
+# 基线知识点刻意不填 from / axiom，而基线学段 refined 为 false——
+# 这两个设置是配套的：基线代表"还没精写的学段"，本来就不该要求推导链。
 POINT = {
     "id": "pri-math-01",
     "title": "数数",
@@ -126,6 +128,7 @@ COVERED = {
     "check_oss": "test_oss_kind_outside_the_allowed_set_is_rejected",
     "check_oss_points_exist": "test_oss_point_reference_that_does_not_exist_is_rejected",
     "check_exit_is_an_action": "test_exit_that_expects_understanding_is_rejected",
+    "check_derivation_chain": "test_missing_derivation_in_a_refined_stage_is_rejected",
 }
 
 
@@ -358,6 +361,91 @@ class ExitActionTest(TreeCase):
         primary = copy.deepcopy(PRIMARY)
         primary["units"][0]["points"][0]["exit"] = "见到不认识的字，能说出它大概跟什么有关。"
         self.write_yaml("curriculum/primary.yaml", primary)
+        self.assertEqual(self.problems(), [])
+
+
+class DerivationChainTest(TreeCase):
+    """ROADMAP 阶段二的出口标准之一：principle 要能指出从哪条更基本的事实推出。
+
+    这条用两个字段表达：`from` 引用更基本的那个知识点，`axiom: true` 表示
+    "到此为止，把它当作给定的事实"。校验器管的是链条的**结构**——
+    引用存在、不自指、互斥、无环、该填的填了。它管不了推导讲得对不对，
+    那件事只能靠人读；写在路线图里而不是假装已经自动检查过。
+    """
+
+    def write_refined_index(self, refined: bool = True) -> None:
+        index = copy.deepcopy(INDEX)
+        index["stages"][0]["refined"] = refined
+        self.write_yaml("curriculum/_index.yaml", index)
+
+    def write_points(self, *points: dict) -> None:
+        primary = copy.deepcopy(PRIMARY)
+        primary["units"][0]["points"] = [copy.deepcopy(p) for p in points]
+        self.write_yaml("curriculum/primary.yaml", primary)
+
+    def with_axiom(self, **over) -> dict:
+        return {**copy.deepcopy(POINT), "axiom": True, **over}
+
+    # ---------------------------------------------------------------- 用例
+    def test_missing_derivation_in_a_refined_stage_is_rejected(self):
+        """标了 refined 却填不出推导，就是一句兑现不了的声明，必须红。"""
+        self.write_refined_index()
+        self.assertProblem("既没有 from 也没有 axiom")
+
+    def test_unrefined_stage_does_not_demand_a_derivation(self):
+        """对照：学段没标 refined 时同样一条知识点必须放行。
+
+        没有这条对照，"既没有 from 也没有 axiom"可以写成无条件拦截——
+        那样全仓库 151 条尚未精写的主干会一起变红，规则立刻失去意义。
+        """
+        self.write_refined_index(refined=False)
+        self.assertEqual(self.problems(), [])
+
+    def test_refined_flag_must_be_written_out_explicitly(self):
+        """refined 省略不写就报错：默认值取哪一边都会让一种解读变成错的。"""
+        index = copy.deepcopy(INDEX)
+        del index["stages"][0]["refined"]
+        self.write_yaml("curriculum/_index.yaml", index)
+        self.assertProblem("refined 必须是 true 或 false")
+
+    def test_from_pointing_nowhere_is_rejected(self):
+        self.write_refined_index()
+        self.write_points(self.with_axiom(id="pri-math-00"),
+                          {**copy.deepcopy(POINT), "from": "pri-math-99"})
+        self.assertProblem("from 引用了不存在的知识点：pri-math-99")
+
+    def test_from_pointing_at_itself_is_rejected(self):
+        self.write_refined_index()
+        self.write_points({**copy.deepcopy(POINT), "from": "pri-math-01"})
+        self.assertProblem("from 指向自己")
+
+    def test_axiom_and_from_together_are_rejected(self):
+        """两者互斥：当作给定事实的条目，就不再从别处推出。"""
+        self.write_refined_index()
+        self.write_points(self.with_axiom(id="pri-math-00"),
+                          self.with_axiom(**{"from": "pri-math-00"}))
+        self.assertProblem("axiom 与 from 不能同时出现")
+
+    def test_axiom_that_is_not_a_boolean_is_rejected(self):
+        self.write_refined_index()
+        self.write_points(self.with_axiom(axiom="yes"))
+        self.assertProblem("axiom 只能是 true")
+
+    def test_derivation_cycle_is_rejected(self):
+        """A 从 B 推出、B 从 A 推出——这种链条读起来像原理，其实什么也没说。"""
+        self.write_points({**copy.deepcopy(POINT), "from": "pri-math-02"},
+                          {**copy.deepcopy(POINT), "id": "pri-math-02",
+                           "title": "另一个", "from": "pri-math-01"})
+        self.assertProblem("推导链成环")
+
+    def test_a_valid_chain_in_a_refined_stage_is_accepted(self):
+        """对照：起点标 axiom、其余引用得上的，必须放行，否则上面几条只是拦得死。"""
+        self.write_refined_index()
+        self.write_points(
+            self.with_axiom(),
+            {**copy.deepcopy(POINT), "id": "pri-math-02", "title": "下一个",
+             "from": "pri-math-01"},
+        )
         self.assertEqual(self.problems(), [])
 
 
