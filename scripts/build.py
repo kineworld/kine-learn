@@ -27,8 +27,11 @@ import _common  # noqa: E402
 from _common import (  # noqa: E402
     iter_points, link_entries, link_status,
     link_status_meta, load_index, load_links, load_oss, load_stages,
-    oss_verified, oss_verified_meta, search_url, write_text,
+    oss_verified, oss_verified_meta, paragraph_stats, search_url, write_text,
 )
+# 注意 PARAGRAPH_MIN_CHARS 不写进上面的 from ... import：那样会固化成一份副本，
+# 而它是要在文档正文里出现的数字。写成 _common.PARAGRAPH_MIN_CHARS，
+# 改一处两边就一起变，不会出现"注释说 120、表头写 150"这种漂移。
 
 # DOCS_DIR / SITE_DIR / ROOT 刻意不写成 `from _common import ...`：
 # 那样会把路径在导入时固化一份，而 _common.set_root() 之后改的是模块里的那份，
@@ -391,6 +394,42 @@ def render_coverage() -> str:
                      f"{row['core']} | {row['resources']} |")
     lines.append(f"| **合计** | {sum(r['subjects'] for r in per_stage)} | **{len(points)}** | "
                  f"{total_core} | {with_res} |")
+
+    # ---- 阶段二进度：主干精写 ----
+    per_stage_para = []
+    for stage in stages:
+        pts = [p for p in points if p["stage_id"] == stage["id"]]
+        per_stage_para.append({"name": stage["name"], **paragraph_stats(pts)})
+    para = paragraph_stats(points)
+    floor = _common.PARAGRAPH_MIN_CHARS
+    lines += [
+        "",
+        "## 阶段二进度：主干精写到哪一步了",
+        "",
+        "[ROADMAP.md](../ROADMAP.md) 的阶段二要求每个主干知识点（`core: true`）都有一段"
+        "能独立读懂的原理，而不是一句提纲。下表是离那个出口还有多远，数字同样现算。",
+        "",
+        f"| 学段 | 主干 | principle 中位字数 | 最短 | 最长 "
+        f"| 已达段落长度（≥{floor} 字） |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    for row in per_stage_para:
+        lines.append(f"| {row['name']} | {row['n']} | {row['median']} | "
+                     f"{row['shortest']} | {row['longest']} | {row['paragraph']} |")
+    lines.append(f"| **合计** | **{para['n']}** | **{para['median']}** | "
+                 f"{para['shortest']} | {para['longest']} | "
+                 f"**{para['paragraph']} / {para['n']}** |")
+    lines += [
+        "",
+        "**字数只是下限的影子，不是判据。** 真正的判据是那条原理有没有指出"
+        "「它从哪条更基本的事实推出」，这件事脚本判不了，只能靠人读。所以上表"
+        "只报数、不拦构建——拿字数当门槛，结果一定是有人往句子里灌水。",
+        "",
+        f"当前数字说明阶段二**还没动笔**：{para['n']} 条主干的中位长度是 "
+        f"{para['median']} 字，最长的也只有 {para['longest']} 字。"
+        "现有写法是浓缩的一句话，方向立得住，但撑不起「独立读懂」——"
+        "缺的是从更基本的事实推到结论中间那几步。",
+    ]
     lines += [
         "",
         "## GitHub 在基础教育这一层是薄的：实测结论",
@@ -722,6 +761,7 @@ def build_html(resmap: dict) -> str:
 
     total_core = sum(1 for p in points if p.get("core"))
     with_res = sum(1 for p in points if p["id"] in resmap)
+    para = paragraph_stats(points)
     stats = [
         {"k": "知识点", "v": len(points)},
         {"k": "其中主干", "v": total_core},
@@ -729,6 +769,10 @@ def build_html(resmap: dict) -> str:
         {"k": "开源项目", "v": len(load_oss())},
         {"k": "配到开源项目的知识点", "v": with_res},
         {"k": "外部链接登记", "v": len(curated)},
+        # 进度数字摆在首页，是为了让它难看。阶段二没动笔这件事写在路线图里
+        # 没人会注意，摆在首页第一屏就藏不住——这类数字的价值全在"藏不住"。
+        {"k": f"主干已达段落长度（≥{_common.PARAGRAPH_MIN_CHARS} 字）",
+         "v": f"{para['paragraph']} / {para['n']}"},
     ]
     payload = {
         # 刻意不放"构建时间"。墙上时钟会让每次构建的产物都不同，

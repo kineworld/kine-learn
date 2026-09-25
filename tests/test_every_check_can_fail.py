@@ -125,6 +125,7 @@ COVERED = {
     "check_links_registry": "test_non_http_link_is_rejected",
     "check_oss": "test_oss_kind_outside_the_allowed_set_is_rejected",
     "check_oss_points_exist": "test_oss_point_reference_that_does_not_exist_is_rejected",
+    "check_exit_is_an_action": "test_exit_that_expects_understanding_is_rejected",
 }
 
 
@@ -325,6 +326,39 @@ class PointCheckTest(TreeCase):
         primary["units"][0]["points"][0]["strand"] = "vibes"
         self.write_yaml("curriculum/primary.yaml", primary)
         self.assertProblem("主线未登记")
+
+
+class ExitActionTest(TreeCase):
+    """ROADMAP 阶段二的出口标准之二：`exit` 必须能当场做一遍。
+
+    这条标准一旦松掉，阶段二剩下的部分就都失去意义：没人能判断一个人
+    "理解"没有，于是那条标准永远做不完，也永远不算没做完。
+    """
+
+    def test_exit_that_expects_understanding_is_rejected(self):
+        primary = copy.deepcopy(PRIMARY)
+        primary["units"][0]["points"][0]["exit"] = "理解数数与多少个的关系。"
+        self.write_yaml("curriculum/primary.yaml", primary)
+        self.assertProblem("出口标准以「理解/掌握/了解」开头")
+
+    def test_capability_verb_followed_by_vague_verb_is_rejected(self):
+        """「能……」是这套材料的通用写法，所以「能理解」这种组合最容易溜过去。"""
+        primary = copy.deepcopy(PRIMARY)
+        primary["units"][0]["points"][0]["exit"] = "能掌握从一数到十。"
+        self.write_yaml("curriculum/primary.yaml", primary)
+        self.assertProblem("「能/会」直接接模糊动词")
+
+    def test_vague_word_inside_a_real_action_is_accepted(self):
+        """对照：「不认识」里含「认识」，但整句是合格的动作描述。
+
+        没有这条对照，正则写成拦「理解|掌握|认识」这些词本身也能让上面两条通过，
+        代价是所有本来写对的出口标准被一起干掉。被误伤的规矩会被绕过，
+        绕过的规矩就再也拦不住任何东西。
+        """
+        primary = copy.deepcopy(PRIMARY)
+        primary["units"][0]["points"][0]["exit"] = "见到不认识的字，能说出它大概跟什么有关。"
+        self.write_yaml("curriculum/primary.yaml", primary)
+        self.assertEqual(self.problems(), [])
 
 
 class RegistryCheckTest(TreeCase):

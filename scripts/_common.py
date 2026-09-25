@@ -192,6 +192,36 @@ def iter_points(skip_missing: bool = False) -> list[dict]:
     return out
 
 
+# 阶段二（主干精写）里"算得上段落"的字数下限。
+#
+# 这是**代理指标**，不是判据，别拿它当验收线。
+# 真正的判据是那条原理有没有指出"它从哪条更基本的事实推出"——那得靠人读，
+# 脚本判不了。字数只是判据的下限影子：提纲句一定短，但写到 120 字也未必讲清。
+# 所以它只用来报进度，不用来拦构建。拿它当门槛，结果一定是有人往句子里灌水。
+PARAGRAPH_MIN_CHARS = 120
+
+
+def paragraph_stats(points: list[dict]) -> dict:
+    """主干知识点的 principle 长度分布，用来回答"阶段二进行到哪了"。
+
+    刻意返回分布（中位、最短、最长）而不是"合格 / 不合格"：
+    合格与否取决于能不能读懂，不取决于字数。给一个二元结论，人就会去凑字数。
+    """
+    lengths = sorted(
+        len(" ".join((p.get("principle") or "").split()))
+        for p in points if p.get("core")
+    )
+    if not lengths:
+        return {"n": 0, "median": 0, "shortest": 0, "longest": 0, "paragraph": 0}
+    return {
+        "n": len(lengths),
+        "median": lengths[len(lengths) // 2],
+        "shortest": lengths[0],
+        "longest": lengths[-1],
+        "paragraph": sum(1 for n in lengths if n >= PARAGRAPH_MIN_CHARS),
+    }
+
+
 def load_links() -> dict:
     raw = load_yaml(LINKS_FILE)
     return {

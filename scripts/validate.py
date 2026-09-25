@@ -64,6 +64,22 @@ PCT_SAFE_RE = re.compile(r"(目标|不是[^。\n]{0,6}承诺|不声称|自我检
 NEGATION_RE = re.compile(r"[不无难未别]")
 NEGATION_LOOKBACK = 4
 
+# 出口标准必须是"当场能做一遍的动作"，不是"学会"。
+#
+# 判据故意收窄：只拦模糊动词**处于支配位置**的写法，不拦这些词本身。
+# 宽泛地拦会误伤——"见到不认识的字，能说出它大概跟什么有关"里出现了"认识"，
+# 但那是"不认识"的一部分，整句本身是合格的动作描述。拦错了要人去改本来是对的
+# 句子，比漏拦几条更糟：规矩一旦开始误伤，人就会绕过它。
+#
+# 这条检查也拦不住"看起来是动作、其实做不到"的出口标准（例如"能说清相对论"）。
+# 那种只能靠人读。这里不假装它拦住了。
+VAGUE_EXIT_PATTERNS = [
+    (r"^\s*(理解|掌握|了解|熟悉|体会|明白)",
+     "出口标准以「理解/掌握/了解」开头，那不是能当场做一遍的动作"),
+    (r"(能|会|可以)(够)?\s*(理解|掌握|了解|熟悉|体会|明白)",
+     "「能/会」直接接模糊动词，那不是能当场做一遍的动作"),
+]
+
 DOC_WORD_FIELDS = ("kid", "principle", "model", "exit", "why")
 OSS_WORD_FIELDS = ("what", "how", "caution")
 
@@ -298,6 +314,27 @@ def check_oss_points_exist(problems: Problems) -> None:
                              f"points 引用了不存在的知识点：{pid}")
 
 
+def check_exit_is_an_action(problems: Problems) -> None:
+    """出口标准要能当场做一遍，不能写成"理解 / 掌握"。
+
+    这条对应 ROADMAP 阶段二的出口标准之二。写进路线图是靠人自觉，写进这里
+    才是靠机器——而"理解"这个词一旦被允许，第二条出口标准就作废了：
+    没人能判断一个人有没有"理解"，于是那条标准永远做不完，也永远不算没做完。
+
+    主干与非主干一起查：非主干同样写着 exit，标准一模一样，没有理由放过。
+    """
+    for point in iter_points(skip_missing=True):
+        text = point.get("exit")
+        if not isinstance(text, str):
+            continue
+        for pattern, label in VAGUE_EXIT_PATTERNS:
+            match = re.search(pattern, text)
+            if match:
+                problems.add(f"curriculum/ :: {point.get('id')}.exit",
+                             f"{label}：「{match.group(0)}」")
+                break
+
+
 def coverage_report(stages: list[dict]) -> list[str]:
     """生成覆盖情况文本。数字全部现算，不写死。"""
     index = load_index()
@@ -336,6 +373,7 @@ ALL_CHECKS = (
     "check_links_registry",
     "check_oss",
     "check_oss_points_exist",
+    "check_exit_is_an_action",
 )
 
 
@@ -355,6 +393,7 @@ def run_all_checks() -> tuple[Problems, dict, list[dict]]:
     check_links_registry(problems)
     check_oss(problems)
     check_oss_points_exist(problems)
+    check_exit_is_an_action(problems)
     return problems, index, stages
 
 
