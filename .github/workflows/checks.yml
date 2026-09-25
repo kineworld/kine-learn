@@ -1,0 +1,69 @@
+name: checks
+
+# 两道关：测试，以及"内容与生成物是否同步"。
+#
+# 刻意不在这里跑 scripts/check_links.py 与 scripts/fetch_oss.py：
+#   外部站点的可用性不受本仓库控制。把链接探测接进 CI，会让无关的 PR
+#   随机变红，而随机红的检查等于没有检查——这正是 scripts/check_links.py
+#   自己在文件头写下的理由。它们由维护者在维护链接时手动跑，结果落进
+#   data/links-status.json，站点页脚会显示上次检查的时间。
+#   （判据本身有测试覆盖：tests/test_link_classify.py。）
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    # 组织级的可复用工作流。它做三件事：跑测试、确认没有测试对运行器隐形
+    # （tests/check_collection.py）、并比对 tests/ 里的守卫副本与
+    # kineworld/.github/guards/ 的原件是否逐字节相同。
+    #
+    # 它拒绝在没有采集守卫的情况下运行——一个"跑完了套件但没法证明套件真的跑了"
+    # 的 job，正是它存在要防的事，所以不允许只采纳一半。
+    uses: kineworld/.github/.github/workflows/python-tests.yml@main
+    with:
+      test-dir: tests
+      install: "-r requirements.txt"
+
+  content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        # actions/checkout v4，与组织级工作流用同一个提交
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Python
+        # actions/setup-python v5，与组织级工作流用同一个提交
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate the content
+        run: python scripts/validate.py -v
+
+      # 生成物进了版本库，所以必须能证明它和源文件一致。
+      #
+      # 这一步能成立的前提是构建可复现（同样的源，两次构建逐字节相同）。
+      # 所以 scripts/build.py 里刻意不放构建时刻——放了这里就永远为红，
+      # 然后没人再看它。tests/test_producer.py 里有用例盯着这两件事。
+      - name: Generated files must match their sources
+        run: |
+          python scripts/build.py
+          if ! git diff --quiet -- docs site; then
+            echo "::error::docs/ 或 site/ 与源文件不同步。在本地跑 python scripts/build.py，把重新生成的产物一起提交。"
+            git diff --stat -- docs site
+            exit 1
+          fi
+          echo "docs/ 与 site/ 与源文件一致"

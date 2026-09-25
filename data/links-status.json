@@ -1,0 +1,247 @@
+{
+ "checked_at": "2026-09-25T02:50:47Z",
+ "note": "unreachable / blocked 只表示本机网络到不了，不表示链接失效。只有 dead（404/410）需要修。",
+ "sample_query": "数学 入门",
+ "count": 27,
+ "entries": {
+  "template:bilibili": {
+   "url": "https://search.bilibili.com/all?keyword=%E6%95%B0%E5%AD%A6+%E5%85%A5%E9%97%A8",
+   "title": "哔哩哔哩检索",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://search.bilibili.com/all?keyword=%E6%95%B0%E5%AD%A6+%E5%85%A5%E9%97%A8",
+   "note": "模板 https://search.bilibili.com/all?keyword={q} 的样例查询"
+  },
+  "template:youtube": {
+   "url": "https://www.youtube.com/results?search_query=%E6%95%B0%E5%AD%A6+%E5%85%A5%E9%97%A8",
+   "title": "YouTube 检索",
+   "status": "unreachable",
+   "code": null,
+   "final_url": null,
+   "note": "模板 https://www.youtube.com/results?search_query={q} 的样例查询"
+  },
+  "template:smartedu-search": {
+   "url": "https://basic.smartedu.cn/search?keyword=%E6%95%B0%E5%AD%A6+%E5%85%A5%E9%97%A8",
+   "title": "国家中小学智慧教育平台检索",
+   "status": "blocked",
+   "code": 403,
+   "final_url": null,
+   "note": "模板 https://basic.smartedu.cn/search?keyword={q} 的样例查询"
+  },
+  "template:ocw-search": {
+   "url": "https://ocw.mit.edu/search/?q=%E6%95%B0%E5%AD%A6+%E5%85%A5%E9%97%A8",
+   "title": "MIT OCW 课程检索",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://ocw.mit.edu/search/?q=%E6%95%B0%E5%AD%A6+%E5%85%A5%E9%97%A8",
+   "note": "模板 https://ocw.mit.edu/search/?q={q} 的样例查询"
+  },
+  "smartedu": {
+   "url": "https://basic.smartedu.cn/",
+   "title": "国家中小学智慧教育平台",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://basic.smartedu.cn/",
+   "note": null,
+   "expect": null
+  },
+  "khan-zh": {
+   "url": "https://zh.khanacademy.org/",
+   "title": "可汗学院（中文）",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://zh.khanacademy.org/",
+   "note": null,
+   "expect": null
+  },
+  "khan-math": {
+   "url": "https://www.khanacademy.org/math",
+   "title": "Khan Academy · Math",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.khanacademy.org/math",
+   "note": null,
+   "expect": null
+  },
+  "khan-science": {
+   "url": "https://www.khanacademy.org/science",
+   "title": "Khan Academy · Science",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.khanacademy.org/science",
+   "note": null,
+   "expect": null
+  },
+  "khan-computing": {
+   "url": "https://www.khanacademy.org/computing",
+   "title": "Khan Academy · Computing",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.khanacademy.org/computing",
+   "note": null,
+   "expect": null
+  },
+  "phet": {
+   "url": "https://phet.colorado.edu/zh_CN/",
+   "title": "PhET 互动仿真实验（中文）",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://phet.colorado.edu/zh_CN/",
+   "note": null,
+   "expect": null
+  },
+  "mit-ocw": {
+   "url": "https://ocw.mit.edu/",
+   "title": "MIT OpenCourseWare",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://ocw.mit.edu/",
+   "note": null,
+   "expect": null
+  },
+  "ocw-1801": {
+   "url": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/",
+   "title": "MIT 18.01 · Single Variable Calculus",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/",
+   "note": null,
+   "expect": null
+  },
+  "ocw-1806": {
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "title": "MIT 18.06 · Linear Algebra",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "note": null,
+   "expect": null
+  },
+  "ocw-804": {
+   "url": "https://ocw.mit.edu/courses/8-04-quantum-physics-i-spring-2016/",
+   "title": "MIT 8.04 · Quantum Physics I",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://ocw.mit.edu/courses/8-04-quantum-physics-i-spring-2016/",
+   "note": null,
+   "expect": null
+  },
+  "icourse163": {
+   "url": "https://www.icourse163.org/",
+   "title": "中国大学MOOC",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.icourse163.org/",
+   "note": null,
+   "expect": null
+  },
+  "openstax": {
+   "url": "https://openstax.org/",
+   "title": "OpenStax · 免费大学教材",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://openstax.org/",
+   "note": null,
+   "expect": null
+  },
+  "3b1b": {
+   "url": "https://www.3blue1brown.com/",
+   "title": "3Blue1Brown（英文站）",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.3blue1brown.com/",
+   "note": null,
+   "expect": null
+  },
+  "desmos": {
+   "url": "https://www.desmos.com/calculator",
+   "title": "Desmos 图形计算器",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.desmos.com/calculator",
+   "note": null,
+   "expect": null
+  },
+  "wolframalpha": {
+   "url": "https://www.wolframalpha.com/",
+   "title": "Wolfram Alpha",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.wolframalpha.com/",
+   "note": null,
+   "expect": null
+  },
+  "oeis": {
+   "url": "https://oeis.org/",
+   "title": "OEIS · 整数数列在线百科",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://oeis.org/",
+   "note": null,
+   "expect": null
+  },
+  "nist-constants": {
+   "url": "https://physics.nist.gov/cuu/Constants/",
+   "title": "NIST 物理常数表",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://physics.nist.gov/cuu/Constants/",
+   "note": null,
+   "expect": null
+  },
+  "feynman": {
+   "url": "https://www.feynmanlectures.caltech.edu/",
+   "title": "费曼物理学讲义（在线全文）",
+   "status": "blocked",
+   "code": 403,
+   "final_url": null,
+   "note": null,
+   "expect": null
+  },
+  "zdic": {
+   "url": "https://www.zdic.net/",
+   "title": "汉典",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://zdic.net/",
+   "note": null,
+   "expect": null
+  },
+  "gushiwen": {
+   "url": "https://www.gushiwen.cn/",
+   "title": "古诗文网",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://www.gushiwen.cn/",
+   "note": null,
+   "expect": null
+  },
+  "moe-curriculum": {
+   "url": "http://www.moe.gov.cn/srcsite/A26/s8001/",
+   "title": "教育部 · 义务教育课程方案和课程标准",
+   "status": "verified",
+   "code": 200,
+   "final_url": "http://www.moe.gov.cn/srcsite/A26/s8001/",
+   "note": null,
+   "expect": null
+  },
+  "arxiv": {
+   "url": "https://arxiv.org/",
+   "title": "arXiv",
+   "status": "verified",
+   "code": 200,
+   "final_url": "https://arxiv.org/",
+   "note": null,
+   "expect": null
+  },
+  "link-check-selftest": {
+   "url": "https://api.github.com/repos/kineworld/kine-learn-selftest-xyz",
+   "title": "自查条目（故意指向不存在的仓库）",
+   "status": "dead",
+   "code": 404,
+   "final_url": null,
+   "note": null,
+   "expect": "dead"
+  }
+ }
+}

@@ -1,0 +1,11 @@
+# 全仓库强制 LF。
+#
+# 理由是可复现而不是风格。本组织其它仓库在 Windows 上带着 core.autocrlf
+# 检出，工作区文件是 CRLF，于是脚本改一行字会让 git diff 显示整个文件重写
+# （kineworld/.github 实测中过两次）。docs/ 与 site/ 是脚本生成的，
+# 生成结果必须与换行符无关，否则 CI 与本地会得出不同结论。
+* text=auto eol=lf
+
+# 生成物在 diff 里不参与统计
+docs/** linguist-generated
+site/** linguist-generated

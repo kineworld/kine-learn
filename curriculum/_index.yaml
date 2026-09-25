@@ -1,0 +1,124 @@
+# 学段、学科与主线总表（唯一事实来源）
+#
+# 本文件不写知识点，只写"有哪些格子"。知识点在 primary/middle/high/university/language.yaml。
+# scripts/validate.py 会检查：这里的 stage_id、subject_id、strand 必须与各学段文件对得上，
+# 对不上就报错。目录与正文不一致是这类教材最常见的腐烂方式，用脚本钉住。
+
+version: v0.1
+updated: 2026-09-25
+
+# ------------------------------------------------------------------ 学段
+stages:
+  - id: primary
+    name: 小学
+    file: primary.yaml
+    grades: 1-6 年级
+    anchor: >
+      小学要建立的不是“知识量”，而是三样东西：数量感（多少、大小、顺序）、
+      因果感（我做什么，世界会怎样变）、符号感（声音、文字、数字都能代表实物）。
+      这三样是后来一切学科的地基，且无法靠背诵补上。
+
+  - id: middle
+    name: 初中
+    file: middle.yaml
+    grades: 7-9 年级
+    anchor: >
+      初中第一次把“世界”拆成可计算的量：路程与速度、力与质量、分子与原子、
+      细胞与基因。核心转变是从“描述现象”升级为“用一个式子预测下一个现象”，
+      并第一次接触“证据不足就不能下结论”。
+
+  - id: high
+    name: 高中
+    file: high.yaml
+    grades: 10-12 年级
+    anchor: >
+      高中把初中的经验公式换成守恒律与场：能量守恒、动量守恒、电荷守恒、
+      平衡与速率。核心转变是承认“看不见的东西也存在”——场、势、熵、概率波，
+      并且学会用守恒与对称性在不求解细节的情况下得到结论。
+
+  - id: university
+    name: 大学基础
+    file: university.yaml
+    grades: 本科一至三年级
+    anchor: >
+      大学阶段做两件事：把直觉换成严格语言（极限、线性、概率的公理化），
+      以及把严格语言装回直觉（变分、场、对称性）。学完的标志不是会算，
+      而是知道每个定义为什么必须长成那样、去掉哪一条会坏掉什么。
+
+  - id: language
+    name: 语言（英语与中文）
+    file: language.yaml
+    grades: 全学段并行
+    anchor: >
+      语言不是一门课，是访问其它一切知识的接口。中文主线决定你能读多深的原始材料，
+      英文主线决定你能接触多大范围的一手文献。两条线都按“输入先于输出”排序。
+
+# ------------------------------------------------------------------ 学科
+subjects:
+  math: {name: 数学, strand_hint: number}
+  chinese: {name: 语文, strand_hint: symbol}
+  english: {name: 英语, strand_hint: symbol}
+  science: {name: 科学, strand_hint: cause}
+  society: {name: 社会与常识, strand_hint: system}
+  physics: {name: 物理, strand_hint: energy}
+  chemistry: {name: 化学, strand_hint: structure}
+  biology: {name: 生物, strand_hint: system}
+  geography: {name: 地理, strand_hint: scale}
+  history: {name: 历史, strand_hint: cause}
+  civics: {name: 道德与法治, strand_hint: system}
+  politics: {name: 思想政治, strand_hint: system}
+  calculus: {name: 微积分, strand_hint: change}
+  linalg: {name: 线性代数, strand_hint: structure}
+  probability: {name: 概率与统计, strand_hint: change}
+  discrete: {name: 离散数学与计算, strand_hint: structure}
+  university_physics: {name: 大学物理, strand_hint: energy}
+  mechanics: {name: 理论力学, strand_hint: change}
+  electrodynamics: {name: 电动力学, strand_hint: energy}
+  quantum: {name: 量子力学, strand_hint: scale}
+  thermo: {name: 热力学与统计物理, strand_hint: energy}
+  computing: {name: 计算与编程, strand_hint: structure}
+  information: {name: 信息与系统, strand_hint: system}
+  methods: {name: 数学方法, strand_hint: change}
+
+# ------------------------------------------------------------------ 世界认知主线
+#
+# 学科是"按人类分工切的"，主线是"按世界本身的运作切的"。
+# 同一件事在不同学科里反复出现，主线是用来发现这件事的工具：
+# 你在初中物理见过的"守恒"，和大学热力学的"熵增"、编程里的"不可逆操作"是同一个东西。
+strands:
+  - id: number
+    name: 数量与度量
+    question: 有多少、多大、多快？凭什么说两个量“相等”？
+  - id: structure
+    name: 结构与层次
+    question: 整体由什么组成、怎么组装、换掉一层会发生什么？
+  - id: change
+    name: 变化与守恒
+    question: 什么变了、什么没变？变化率是多少、累积起来是多少？
+  - id: energy
+    name: 能量与转化
+    question: 做一件事要付出什么代价？代价去了哪里？
+  - id: cause
+    name: 因果与证据
+    question: 是“一起出现”还是“因为所以”？怎么设计一个能失败的检验？
+  - id: system
+    name: 系统与反馈
+    question: 多个部分互相影响时，整体会出现什么谁都没预料的行为？
+  - id: symbol
+    name: 符号与语言
+    question: 用什么记号承载思想，换一套记号会失去什么？
+  - id: scale
+    name: 尺度与极限
+    question: 放大一万倍、缩小一万倍、趋近于零或无穷，规律会怎样改形？
+
+# ------------------------------------------------------------------ 读法
+reading_paths:
+  - id: ten-year
+    name: 十年主线（在校学生）
+    note: 按学段顺序读完，每点做到 exit 才算过。不追求速度，追求“能自己讲给别人听”。
+  - id: intuition-first
+    name: 直觉优先（成年人补课）
+    note: 先读所有 core 标记的知识点，建立世界运作的骨架，再回头补细节。允许跳过高中的计算技巧。
+  - id: world-model
+    name: 世界模型方向（勘境贡献者）
+    note: 直接读 strand 为 change/cause/system/scale 的知识点，再看大学段的 calculus、linalg、probability、information。这条线通向 kineworld 的既有教程。

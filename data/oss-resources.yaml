@@ -1,0 +1,770 @@
+# 开源资源索引（唯一事实来源）
+#
+# 为什么这个文件里**没有星数和许可证**：那些数字必须由 scripts/fetch_oss.py 从
+# GitHub API 现拉，写进 data/oss-verified.json。手打的数字会在几周后骗人，
+# 而骗人的数字比没有数字更糟（本组织 CONTRIBUTING.md 第 1 条）。
+#
+# 每条要写清楚：
+#   repo     仓库全名。大小写以 API 返回的 full_name 为准，validate.py 会比对并报错。
+#   title    中文名，便于阅读。
+#   lang     zh / en / multi
+#   kind     tutorial 教程 | textbook 教材 | simulation 仿真 | dataset 数据 |
+#            tool 工具 | course_list 课程索引 | practice 练习
+#   points   它能支撑本仓库哪些知识点的 id。build.py 用它生成"知识点 → 资源"反查表。
+#   what     一句话它到底是什么（不是它的宣传语）。
+#   how      怎么用，要具体到"从哪一节开始、配合哪个知识点"。
+#   caution  限制与风险。没有风险的条目通常是因为没认真看。
+#
+# 收录标准（三条都满足才收）：
+#   1. 能用 GitHub API 查到、不是空壳（有实际内容体量）。
+#   2. 与本仓库某个知识点的出口标准直接对应，能替代或补足它。
+#   3. 能说清它的限制：时效、许可证、语言、是否归档。
+
+resources:
+  # ---------------------------------------------------------------- 自学路径骨架
+  - repo: ossu/math
+    title: OSSU 数学自学路径
+    lang: en
+    kind: course_list
+    points: [uni-cal-01, uni-lin-01, uni-pro-01]
+    what: 一条按依赖关系排好的大学数学自学路线：从逻辑与证明开始，到线性代数、微积分、概率、微分方程。
+    how: 用它解决“我该按什么顺序学”的问题，而不是解决“这个定义是什么”。读它的课程顺序，教材换成本仓库对应的中文入口。
+    caution: 它只给顺序与课程链接，不给答案与反馈。没有作业批改的自学路线，通过率低，必须自己找人互查。
+
+  - repo: ossu/computer-science
+    title: OSSU 计算机科学自学路径
+    lang: en
+    kind: course_list
+    points: [uni-dis-01, uni-com-01, uni-dis-03]
+    what: 计算机本科的核心课程顺序表，含每门课的免费教材与作业。
+    how: 当索引看。国内学生优先换成 QSCTech/zju-icicles 或 PKUanonym/REKCARC-TSC-UHT 里对应的课程材料。
+    caution: 课程链接是逐年累积的，早期链接可能失效。以它给的课程名去搜最新版本更稳。
+
+  - repo: ossu/data-science
+    title: OSSU 数据科学自学路径
+    lang: en
+    kind: course_list
+    points: [uni-pro-01, uni-com-03]
+    what: 数据科学的自学课程顺序，偏统计与编程的组合。
+    how: 在大学段概率与统计学完后当作应用路线的补充。
+    caution: 最后更新时间较旧，工具类内容（框架、库）已部分过时，方法论部分仍然有效。
+
+  - repo: rossant/awesome-math
+    title: 数学资源索引
+    lang: en
+    kind: course_list
+    points: [uni-cal-03, uni-met-01]
+    what: 按主题分类的数学学习资源清单（教材、讲义、视频、工具）。
+    how: 遇到本仓库没展开的主题（拓扑、数论、代数几何）时，用它找入口。
+    caution: 是清单不是课程，不保证质量一致。挑资源时优先看有没有配套习题与答案。
+
+  # ---------------------------------------------------------------- 仿真实验（PhET）
+  - repo: phetsims/states-of-matter
+    title: PhET 物质三态
+    lang: zh
+    kind: simulation
+    points: [pri-sci-02, mid-che-01]
+    what: 可拖动粒子、加热降温的交互仿真，直接看三态变化时粒子在做什么。
+    how: 先玩十分钟，再读知识点正文。小孩子看不懂文字，看懂这个就能记住结论。
+    caution: 仿真是示意模型，粒子的画法与真实分子形状无关。别把示意图当结构式。
+
+  - repo: phetsims/build-an-atom
+    title: PhET 原子构建器
+    lang: zh
+    kind: simulation
+    points: [mid-che-01, mid-che-02, hi-che-01]
+    what: 往原子里加质子、中子、电子，看元素种类、电荷与质量怎么变。
+    how: 加质子看到元素变了，加中子看到同位素，减电子变成离子。三个操作对应三个概念。
+    caution: 不展示电子云形状，无法替代量子力学的原子模型。
+
+  - repo: phetsims/circuit-construction-kit-dc
+    title: PhET 直流电路搭建
+    lang: zh
+    kind: simulation
+    points: [mid-phy-07, mid-phy-08]
+    what: 拖电池、电阻、导线搭电路，实时看电流与电压。
+    how: 先搭一个串联，再改成并联，比较亮度的差别。欧姆定律的两道公式就落在这里。
+    caution: 理想导线与理想电池不会发热，与真实电路有差别。
+
+  - repo: phetsims/projectile-motion
+    title: PhET 抛体运动
+    lang: zh
+    kind: simulation
+    points: [hi-phy-01, hi-phy-02]
+    what: 可调角度、初速度与质量的抛体实验，同时显示轨迹与速度分量。
+    how: 固定初速度，只改角度，找出射程最大的角度——这是把函数极值用起来的最快方式。
+    caution: 默认无空气阻力，真实飞行要考虑阻力后最优角不再是 45 度。
+
+  - repo: phetsims/energy-skate-park
+    title: PhET 能量滑板场
+    lang: zh
+    kind: simulation
+    points: [mid-phy-05, hi-phy-04]
+    what: 滑板上上下下，同时显示动能与势能的柱状图。
+    how: 开着能量柱看一遍全程，能量的“总量不变、形式互换”就再也忘不掉了。
+    caution: 默认无摩擦。打开摩擦后才能看到能量“消失”的部分去了热。
+
+  - repo: phetsims/gravity-and-orbits
+    title: PhET 引力与轨道
+    lang: zh
+    kind: simulation
+    points: [hi-phy-05, uni-phy-01]
+    what: 调整质量与初速度，看轨道变成圆、椭圆或直接飞走。
+    how: 只改初速度不改变其它量，找到圆轨道与逃逸的两个临界值。
+    caution: 只处理两体问题。三体以上的行为无法用它直觉化。
+
+  - repo: phetsims/wave-interference
+    title: PhET 波的干涉
+    lang: zh
+    kind: simulation
+    points: [hi-phy-08, uni-phy-06]
+    what: 两个波源同时发波，实时光场显示干涉条纹。
+    how: 改频率与间距，观察条纹间距变化，这是“用条纹数长度”的直观来源。
+    caution: 水波与光波只是数学同构，不能据此认为光需要介质。
+
+  - repo: phetsims/masses-and-springs
+    title: PhET 质量与弹簧
+    lang: zh
+    kind: simulation
+    points: [uni-phy-03]
+    what: 弹簧振子仿真，显示周期与振幅、质量、劲度系数的关系。
+    how: 改变振幅，确认周期不变——这是简谐振动最反直觉也最核心的一条。
+    caution: 只模拟理想弹簧，不涉及阻尼与非线性。
+
+  - repo: phetsims/geometric-optics
+    title: PhET 几何光学
+    lang: zh
+    kind: simulation
+    points: [mid-phy-06, uni-phy-06]
+    what: 透镜与反射镜成像仿真，物距改变时成像位置与大小实时变化。
+    how: 拖动物体穿过焦点，看实像何时变成虚像。
+    caution: 几何光学不含波长效应，干涉衍射要换 wave-interference。
+
+  - repo: phetsims/color-vision
+    title: PhET 颜色视觉
+    lang: zh
+    kind: simulation
+    points: [pri-sci-04]
+    what: 单色光混合与滤光的交互演示。
+    how: 小学阶段用它说明“看到的颜色是光与眼睛共同的结果”，不必讲波长。
+    caution: 显示器的颜色不等于真实光谱，只作定性演示。
+
+  # ---------------------------------------------------------------- 数学习题与图形
+  - repo: geogebra/geogebra
+    title: GeoGebra 数学软件
+    lang: zh
+    kind: tool
+    points: [mid-math-05, mid-math-06, hi-math-03, hi-math-06]
+    what: 几何作图与函数绘图的数学软件，改动参数图像立即跟着变。
+    how: 每学一个函数都画一遍再改参数。理解“参数决定形状”比背性质表快得多。
+    caution: 仓库是官方镜像，日常使用建议直接访问官网在线版。没有图形计算器时会很依赖它。
+
+  - repo: OpenLogicProject/OpenLogic
+    title: 开源逻辑学教材
+    lang: en
+    kind: textbook
+    points: [mid-civ-03, hi-chn-03, uni-dis-01]
+    what: 一本可自由改编的中级逻辑教材，覆盖命题逻辑、一阶逻辑、可靠性与完全性。
+    how: 只读前三章就够用：形式化、真值表、有效性。之后遇到“这个论证对不对”就有工具了。
+    caution: 英文。习题无官方答案册，需要自己找人核对。
+
+  # ---------------------------------------------------------------- 统计与大学教材
+  - repo: OpenIntroStat/openintro-statistics
+    title: OpenIntro 统计学教材
+    lang: en
+    kind: textbook
+    points: [mid-math-10, hi-math-08, uni-pro-05, uni-pro-06]
+    what: 大学入门统计的开源教材，配套数据与 R 代码。
+    how: 直接读置信区间与假设检验两章，用它的数据自己算一遍，比读定义记得住。
+    caution: 代码示例以 R 为主。书中的例子是英文语境下的数据集。
+
+  - repo: openstax/osbooks-prealgebra-bundle
+    title: OpenStax 预备代数（初中代数）
+    lang: en
+    kind: textbook
+    points: [mid-math-01, mid-math-02, mid-math-03]
+    what: 初中代数水平的开源教材，含大量分级习题与答案。
+    how: 用来补习题量：国内教材例题少，解释多；这本反过来，适合刷。
+    caution: 英文，且体系与中国课标不完全对齐（进度与术语都有差别）。
+
+  - repo: openstax/osbooks-college-algebra-bundle
+    title: OpenStax 大学代数
+    lang: en
+    kind: textbook
+    points: [hi-math-02, hi-math-04]
+    what: 函数、指数对数、数列与级数的大学先修教材。
+    how: 与高中函数章节对照读，看同一件事的两种讲法。
+    caution: 英文。深度低于数学系的分析课，属于工科预备水平。
+
+  - repo: openstax/osbooks-calculus-bundle
+    title: OpenStax 微积分
+    lang: en
+    kind: textbook
+    points: [uni-cal-01, uni-cal-02, uni-cal-04, uni-cal-05]
+    what: 三卷本微积分教材，讲义、习题与答案齐全，可免费下载 PDF。
+    how: 配合 MIT 18.01 使用：MIT 给讲解，这本给题量与答案。
+    caution: 英文。分卷本内容有重叠，选一本用，不要三本都开。
+
+  - repo: openstax/osbooks-physics
+    title: OpenStax 大学物理（含高中物理）
+    lang: en
+    kind: textbook
+    points: [hi-phy-01, hi-phy-04, hi-phy-06, uni-phy-01]
+    what: 从高中到大学入门的物理教材，覆盖力学、热学、电磁、光学。
+    how: 用它补英文术语：中文会了但读英文文献卡住，多数卡在术语而不是概念。
+    caution: 英文。数学要求低于理论力学与电动力学的专业课教材。
+
+  - repo: openstax/osbooks-university-physics-bundle
+    title: OpenStax 大学物理（三卷本，微积分基础）
+    lang: en
+    kind: textbook
+    points: [uni-phy-01, uni-phy-02, uni-phy-04, uni-phy-05]
+    what: 基于微积分的大学物理教材，定位是理工科一年级的普物。
+    how: 学完微积分再读，顺序反过来会很痛苦。
+    caution: 英文。电磁部分不如专门的《电动力学》深入。
+
+  # ---------------------------------------------------------------- 计算机与算法
+  - repo: krahets/hello-algo
+    title: Hello 算法
+    lang: zh
+    kind: tutorial
+    points: [uni-dis-03, uni-com-01]
+    what: 中文数据结构与算法教程，每个数据结构都配动画图解与可运行代码，支持十多种语言。
+    how: 本仓库离散数学与计算单元的主要配套读物。先看动画建立直觉，再自己写一遍。
+    caution: 面向面试与入门，不覆盖算法理论的证明部分。仓库体积大，克隆前先看在线版。
+
+  - repo: youngyangyang04/leetcode-master
+    title: 代码随想录
+    lang: zh
+    kind: practice
+    points: [uni-dis-03, uni-dis-02]
+    what: 按类型组织的刷题顺序与题解，中文，含图示。
+    how: 配合 Hello 算法：一个讲结构，一个给题目。按它的顺序刷，不要乱序刷。
+    caution: 刷题数量不等于能力。没有复习机制，刷过的题两周后会全忘。
+
+  - repo: practical-tutorials/project-based-learning
+    title: 基于项目的学习清单
+    lang: en
+    kind: course_list
+    points: [uni-com-01]
+    what: 按语言与方向分类的“动手做出一个东西”的教程清单。
+    how: 学完基础语法后，从这里挑一个项目做完。只看不做等于没学。
+    caution: 清单质量参差，部分链接失效。选之前确认最后更新时间。
+
+  - repo: codecrafters-io/build-your-own-x
+    title: 从零重造技术
+    lang: en
+    kind: course_list
+    points: [uni-com-01, uni-dis-04]
+    what: 教你从零实现数据库、解释器、操作系统、神经网络等系统的教程清单。
+    how: 想真正理解“一个系统内部怎么运作”时用它。挑一个与你当前方向相关的做完。
+    caution: 难度差异极大。从最简单的（如写一个 JSON 解析器）开始，不要一上来做操作系统。
+
+  - repo: donnemartin/system-design-primer
+    title: 系统设计入门
+    lang: en
+    kind: tutorial
+    points: [uni-inf-03, uni-inf-04]
+    what: 大规模系统的设计基础：缓存、一致性、可用性、消息队列。
+    how: 在本仓库的信息与系统单元之后读，把反馈、噪声、可靠性的概念落到真实架构上。
+    caution: 面向面试场景，部分方案偏工程惯例而非第一性原理解释。
+
+  - repo: nilbuild/developer-roadmap
+    title: 开发者路线图
+    lang: en
+    kind: course_list
+    points: [uni-com-01]
+    what: 各方向的技能地图，标注了依赖关系与推荐学习顺序。
+    how: 当“我需要学什么”的检查表用，不当学习材料用。
+    caution: 罗列的技术面很宽，容易变成收集书签而不是真的学会。
+
+  - repo: microsoft/Web-Dev-For-Beginners
+    title: 微软 Web 开发入门（12 周课程）
+    lang: multi
+    kind: tutorial
+    points: [uni-com-01]
+    what: 微软出的 12 周前端课程，含项目、测验与多语言翻译版本。
+    how: 结构完整、有作业有测验，是“有人替你把关进度”的少数免费课程之一。
+    caution: 多语言版本由社区翻译，可能落后于英文原版。
+
+  - repo: microsoft/ML-For-Beginners
+    title: 微软机器学习入门（12 周，26 课）
+    lang: multi
+    kind: tutorial
+    points: [uni-com-03, uni-pro-03]
+    what: 经典机器学习课程，用 scikit-learn，含测验与项目。
+    how: 大学段“机器学习最小闭环”的主要配套课程。先跑通它的第一个实验再谈别的。
+    caution: 偏经典机器学习，不覆盖深度学习与大模型。含测验答案，容易被用来“抄作业”。
+
+  - repo: microsoft/AI-For-Beginners
+    title: 微软 AI 入门（12 周，24 课）
+    lang: multi
+    kind: tutorial
+    points: [uni-com-03]
+    what: 人工智能概念课，含搜索、知识表示、神经网络、伦理。
+    how: 比 ML-For-Beginners 更偏概念，适合先建立全局观再学具体算法。
+    caution: 概念密度高但推导少，不能替代数学基础。
+
+  - repo: microsoft/Data-Science-For-Beginners
+    title: 微软数据科学入门（10 周，20 课）
+    lang: multi
+    kind: tutorial
+    points: [uni-pro-05, uni-com-03]
+    what: 数据科学全流程课程：取数、清洗、可视化、建模、部署。
+    how: 用来学“从一份脏数据到一个可信结论”的完整流程，这部分数学课不会教。
+    caution: 工具版本更新快，演练代码可能需要调整依赖版本。
+
+  - repo: microsoft/generative-ai-for-beginners
+    title: 微软生成式 AI 入门（21 课）
+    lang: multi
+    kind: tutorial
+    points: [uni-com-03]
+    what: 生成式 AI 应用开发课程，含提示工程与实践项目。
+    how: 只在本仓库大学段基础过完之后进入。跳过数学直接学提示工程，会停在“会用不会判断”。
+    caution: 依赖外部模型服务，部分课程需要密钥与额度。
+
+  - repo: huggingface/course
+    title: Hugging Face 课程
+    lang: en
+    kind: tutorial
+    points: [uni-com-03, uni-met-01]
+    what: Transformers 与自然语言处理实操课程，边讲边跑代码。
+    how: 需要先有 PyTorch 与线性代数基础，再进来。
+    caution: 与特定库的版本强耦合，长期看文档会比课程更新。
+
+  - repo: mlabonne/llm-course
+    title: LLM 课程
+    lang: en
+    kind: course_list
+    points: [uni-com-03]
+    what: 大语言模型路线的路线图与配套笔记，分基础、科学、工程三部分。
+    how: 当索引用，挑“科学”部分扫一遍建立术语表。
+    caution: 收录内容更新速度快于维护速度，部分章节已过时。
+
+  - repo: ageron/handson-ml3
+    title: 机器学习实战（第三版）
+    lang: en
+    kind: tutorial
+    points: [uni-com-03, uni-com-04]
+    what: 一本以可运行 notebook 为主的机器学习教材，从线性回归讲到 Transformer。
+    how: 每个 notebook 都跑一遍并改参数，是“最小闭环”最省力的练习路径。
+    caution: 需要本地装好科学计算环境；直接读不跑效果大打折扣。
+
+  - repo: d2l-ai/d2l-zh
+    title: 动手学深度学习（中文）
+    lang: zh
+    kind: textbook
+    points: [uni-cal-05, uni-lin-01, uni-com-03]
+    what: 中文深度学习教材，每个概念配可运行代码，被五百多所大学用于教学。
+    how: 中文读者学深度学习的第一选择。数学不熟就一边看一边补微积分与线代。
+    caution: 仓库最近一次提交是 2024 年，框架版本已落后。按书里的版本装环境，别用最新的。
+
+  - repo: exacity/deeplearningbook-chinese
+    title: 深度学习（花书）中文翻译
+    lang: zh
+    kind: textbook
+    points: [uni-com-03, uni-pro-02]
+    what: 《Deep Learning》的中文翻译，覆盖线性代数、概率、优化到生成模型的理论。
+    how: 当参考书查，不要当教程顺读。第一部分（数学基础）值得通读。
+    caution: 原书 2016 年版，生成模型部分已明显过时。翻译校对问题较多，关键结论对照英文原文。
+
+  - repo: nndl/nndl.github.io
+    title: 神经网络与深度学习（蒲公英书）主站
+    lang: zh
+    kind: textbook
+    points: [uni-com-03, uni-met-03]
+    what: 中文神经网络与深度学习教材的在线主站，含电子书与阅读路径。
+    how: 比花书更接近教学顺序，适合中文读者从零建立深度学习框架。
+    caution: 站点内容是图书介绍与电子书入口，正文不在仓库里。
+
+  - repo: openai/spinningup
+    title: Spinning Up 强化学习
+    lang: en
+    kind: tutorial
+    points: [uni-inf-03, uni-com-03]
+    what: OpenAI 出的强化学习入门教程，含算法讲解与可运行实现。
+    how: 学“反馈与控制”之后读它，能把反馈回路与序列决策连起来。
+    caution: 最后更新 2024 年，依赖较旧版本的框架；内容为教育用途，不是产品代码。
+
+  - repo: microsoft/QuantumKatas
+    title: 微软量子编程习题
+    lang: en
+    kind: practice
+    points: [uni-qua-01, uni-qua-02]
+    what: 量子计算的自学教程与编程练习，从叠加、测量讲到算法。
+    how: 量子力学的三个反直觉点（叠加、测量、纠缠）在这里被逼着写成代码，比读定义有效。
+    caution: 仓库已归档，不再维护；依赖 Q# 工具链。
+
+  - repo: Qiskit/qiskit
+    title: Qiskit 量子计算 SDK
+    lang: en
+    kind: tool
+    points: [uni-qua-02, uni-qua-04]
+    what: IBM 的开源量子计算框架，含模拟器。
+    how: 用模拟器把薛定谔方程的小例子跑一遍，观察叠加与纠缠的实际输出分布。
+    caution: 是工程工具不是教材，没有讲解就没有收获。
+
+  - repo: qiskit-community/qiskit-textbook
+    title: Qiskit 大学量子计算课程
+    lang: en
+    kind: textbook
+    points: [uni-qua-01, uni-qua-03]
+    what: 大学量子算法与计算课程的配套教材。
+    how: 与 Qiskit 一起用，边读边跑。
+    caution: 仓库已归档（2024 年 11 月），部分内容迁移到 IBM 新平台。
+
+  - repo: scipy-lectures/scientific-python-lectures
+    title: 科学计算讲义
+    lang: en
+    kind: tutorial
+    points: [uni-cal-05, uni-com-04, uni-met-01]
+    what: Python 科学计算生态的系统讲义：NumPy、SciPy、Matplotlib、SymPy 的用法与原理。
+    how: 大学段一切数值实验的工具手册。遇错先查这里，再查搜索引擎。
+    caution: 讲义随生态演进，个别 API 已改名。
+
+  # ---------------------------------------------------------------- 数学工具与可视化
+  - repo: 3b1b/manim
+    title: Manim（3Blue1Brown 动画引擎）
+    lang: en
+    kind: tool
+    points: [uni-met-01]
+    what: 用于制作数学讲解动画的引擎，3Blue1Brown 视频即由它产出。
+    how: 想真正理解一个概念，就用它把概念画出来。能画出来说明真的懂了。
+    caution: 学习曲线陡峭，投入产出比取决于你是否需要做视频。
+
+  - repo: ManimCommunity/manim
+    title: Manim 社区版
+    lang: en
+    kind: tool
+    points: [uni-met-01]
+    what: 社区维护的 Manim 分支，文档与安装体验更友好。
+    how: 新用户从这一版开始，不要从原版开始。
+    caution: 与 3b1b 原版 API 不完全兼容，网上教程混用时要注意版本。
+
+  - repo: sympy/sympy
+    title: SymPy 符号计算
+    lang: en
+    kind: tool
+    points: [uni-cal-03, uni-lin-04]
+    what: 纯 Python 的符号计算库，能求导、积分、解方程、求特征值。
+    how: 定位是**校验你的手算**。先自己算，再让它检查，不要反过来。
+    caution: 求不出的积分它也会求不出；结果是表达式，需要自己判断是否化简到位。
+
+  - repo: numpy/numpy
+    title: NumPy
+    lang: en
+    kind: tool
+    points: [uni-lin-02, uni-com-04]
+    what: Python 的数组计算基础库，几乎所有科学计算的底座。
+    how: 把线性代数的矩阵运算亲手写一遍，再和 NumPy 的结果对照。
+    caution: 广播规则与浮点误差是两个高频踩坑点，文档要读细。
+
+  - repo: scipy/scipy
+    title: SciPy
+    lang: en
+    kind: tool
+    points: [uni-met-03, uni-com-04]
+    what: 建立在 NumPy 上的科学计算算法库：优化、积分、插值、信号处理。
+    how: 学优化时用它验证自己写的梯度下降是否收敛到同一个点。
+    caution: 它是算法库，不解释原理。不看文档直接用会得到看不懂的结果。
+
+  - repo: matplotlib/matplotlib
+    title: Matplotlib
+    lang: en
+    kind: tool
+    points: [uni-com-04]
+    what: Python 的绘图库。
+    how: 每个数值实验都先画图再下结论。画图是最便宜的错误检查。
+    caution: 默认样式不适合出版，配色与字号需要手动调整。
+
+  - repo: jupyter/notebook
+    title: Jupyter Notebook
+    lang: en
+    kind: tool
+    points: [uni-com-02]
+    what: 交互式笔记本环境，代码、结果与解释放在同一个文档里。
+    how: 用它写实验记录：一步代码、一个结果、一句结论。这就是可复现实验的最小形式。
+    caution: 执行顺序与保存状态容易不一致，重跑一遍才发现结果对不上是常态。用“全部重跑”校验。
+
+  - repo: scikit-learn/scikit-learn
+    title: scikit-learn
+    lang: en
+    kind: tool
+    points: [uni-com-03, uni-pro-06]
+    what: 经典机器学习算法的标准实现库。
+    how: 用它对比不同模型在同一数据上的表现，训练集与测试集必须自己分好。
+    caution: 默认参数会给出看起来不错的分数，交叉验证不做就不知道真假。
+
+  - repo: pytorch/pytorch
+    title: PyTorch
+    lang: en
+    kind: tool
+    points: [uni-cal-05, uni-com-03]
+    what: 主流深度学习框架，自动求梯度。
+    how: 用它验证链式法则：自己手推梯度，再和 autograd 的结果比。
+    caution: 显存、随机种子、设备不一致会给出难以复现的结果。实验前先把这三样固定。
+
+  - repo: jax-ml/jax
+    title: JAX
+    lang: en
+    kind: tool
+    points: [uni-com-03, uni-met-03]
+    what: 可组合变换的数值计算库：自动微分、向量化、JIT 编译到加速器。
+    how: 想理解“函数式视角下的求导与向量化”时读它的教程，视角与 PyTorch 不同但更干净。
+    caution: 函数式约束（不可变数组）对初学者有额外负担，不建议作为第一个框架。
+
+  - repo: mathjax/MathJax
+    title: MathJax
+    lang: en
+    kind: tool
+    points: []
+    what: 浏览器里渲染数学公式的库。
+    how: 自建笔记站点时用它，公式直接写 LaTeX。
+    caution: 只是渲染工具，与数学内容本身无关。
+
+  # ---------------------------------------------------------------- 语言与字典数据
+  - repo: chinese-poetry/chinese-poetry
+    title: 中华古诗词数据库
+    lang: zh
+    kind: dataset
+    points: [mid-chn-04, lang-chn-03]
+    what: 最全的中文古诗词结构化数据集，含唐宋诗词、作者与题材标注。
+    how: 学古诗时不用它当读物（格式是 JSON），用它做统计：某意象在哪些朝代最常出现。
+    caution: 是数据不是解读。版权状态按诗词本身属于公有领域，但整理成果的授权要按仓库声明执行。
+
+  - repo: pwxcoo/chinese-xinhua
+    title: 新华字典数据库（含成语、歇后语）
+    lang: zh
+    kind: dataset
+    points: [pri-chn-01, lang-chn-01]
+    what: 汉字、词语、成语、歇后语的结构化数据。
+    how: 查一个字的读音与释义，或用它批量统计偏旁分布来学形声字规律。
+    caution: 最近更新 2023 年底。字典内容以开源数据整理为准，遇到争议释义以官方字典为准。
+
+  - repo: skishore/makemeahanzi
+    title: 汉字字形与笔顺数据
+    lang: zh
+    kind: dataset
+    points: [pri-chn-01, lang-chn-01]
+    what: 汉字的笔画路径、部件分解与笔顺数据，覆盖数千常用字。
+    how: 想搞清楚一个字为什么这么写，查它的部件分解，比看动画更接近字源。
+    caution: 数据量大，仓库体积不小。授权条款需要阅读原文确认。
+
+  - repo: chanind/hanzi-writer
+    title: Hanzi Writer 汉字笔顺动画
+    lang: zh
+    kind: tool
+    points: [pri-chn-01]
+    what: 网页上的汉字笔顺演示与书写测验组件。
+    how: 教小孩写字时用它演示笔顺，比看静态字帖直观。
+    caution: 它演示的是规范笔顺，不解释字源，两者是不同层次的信息。
+
+  - repo: skywind3000/ECDICT
+    title: 英汉词典数据库
+    lang: multi
+    kind: dataset
+    points: [pri-eng-02, lang-eng-03]
+    what: 免费英汉词典数据，含音标、释义、词频与词形变化。
+    how: 用它自建生词本：按词频挑高频词先背，而不是按字母表背。
+    caution: 释义质量参差，涉及专业术语时要对照权威词典。
+
+  - repo: mahavivo/english-wordlists
+    title: 常用英语词汇表
+    lang: multi
+    kind: dataset
+    points: [pri-eng-02, lang-eng-03]
+    what: 按考试与场景整理的英语词表集合。
+    how: 用来确定“这一阶段该背哪些词”，避免在低频词上浪费时间。
+    caution: 未声明许可证，作为词表使用没有问题，再分发需要确认。
+
+  - repo: rspeer/wordfreq
+    title: 词频数据库
+    lang: en
+    kind: dataset
+    points: [pri-eng-02, lang-eng-03]
+    what: 多语言词频数据，覆盖三十多种语言。
+    how: 遇到“这个词要不要背”的问题时查频率。不到万分之一使用率的词可以先放着。
+    caution: 语料来源偏书面与网络文本，口语频率会低估。
+
+  - repo: ankitects/anki
+    title: Anki 间隔重复记忆软件
+    lang: multi
+    kind: tool
+    points: [lang-eng-03, lang-chn-02]
+    what: 依据遗忘曲线安排复习的卡片软件。
+    how: 语言与记忆类知识的标准工具。卡片要自己写，抄来的牌组记不住。
+    caution: 制卡成本高，卡片做得太细会让每天复习量失控。宁可少做卡，也要做完。
+
+  - repo: open-spaced-repetition/fsrs4anki
+    title: FSRS 记忆调度算法
+    lang: zh
+    kind: tool
+    points: [lang-eng-03]
+    what: 基于记忆模型的复习间隔调度算法，可替换 Anki 的默认调度。
+    how: 用了几周 Anki 之后再上它，靠自己的复习数据训练参数才有意义。
+    caution: 需要积累一定复习记录才能生效，新手直接用默认调度即可。
+
+  - repo: nltk/nltk
+    title: NLTK 自然语言工具包
+    lang: en
+    kind: tool
+    points: [lang-eng-02, lang-chn-04]
+    what: 经典自然语言处理库，含分词、词性标注、语料库。
+    how: 想搞清楚“分词与词性标注到底在做什么”时，用它跑中文与英文的对比。
+    caution: 面向教学与研究中古场景，生产环境已被更新的工具替代。
+
+  - repo: stanfordnlp/stanza
+    title: Stanza 多语言 NLP 工具
+    lang: en
+    kind: tool
+    points: [lang-chn-04, lang-eng-02]
+    what: 支持七十多种语言的分词、句法与依存分析工具。
+    how: 分析中文句子的成分结构时用它，比手动画句子成分更省力，也更客观。
+    caution: 自动分析会出错，尤其是长句与口语；结论要人工核对。
+
+  # ---------------------------------------------------------------- 化学 / 生物 / 地理
+  - repo: rdkit/rdkit
+    title: RDKit 化学信息学库
+    lang: en
+    kind: tool
+    points: [hi-che-05]
+    what: 分子结构处理与化学信息学计算的工具库。
+    how: 学有机化学时用它把分子式变成结构图，或生成同分异构体列表。
+    caution: 需要一定的编程基础，纯化学背景上手会卡在环境配置。
+
+  - repo: openbabel/openbabel
+    title: Open Babel 化学数据工具箱
+    lang: en
+    kind: tool
+    points: [hi-che-05]
+    what: 在几十种化学文件格式之间转换，并做基本分子计算。
+    how: 需要把不同来源的分子数据统一格式时用它。
+    caution: 命令行工具为主，格式转换偶有信息丢失，转换后要抽样检查。
+
+  - repo: OpenChemistry/avogadrolibs
+    title: Avogadro 分子编辑器核心库
+    lang: en
+    kind: tool
+    points: [mid-che-01, hi-che-02]
+    what: 三维分子可视化与编辑的底层库。
+    how: 需要看三维分子形状时用它。课本上的平面式子会隐藏立体结构。
+    caution: 是库不是应用，普通用户应装 Avogadro 程序而不是编译这个。
+
+  - repo: biopython/biopython
+    title: Biopython 生物信息学库
+    lang: en
+    kind: tool
+    points: [mid-bio-02, hi-bio-01]
+    what: 处理 DNA、RNA、蛋白质序列与结构的标准库。
+    how: 学中心法则时，用真实的一条基因序列走一遍转录与翻译，比看示意图扎实。
+    caution: 需要会 Python。生物学概念不会因为用工具而自动理解。
+
+  - repo: scikit-bio/scikit-bio
+    title: scikit-bio 生物信息学工具包
+    lang: en
+    kind: tool
+    points: [hi-bio-05]
+    what: 面向生态与微生物组数据的分析工具。
+    how: 学种群与多样性时用它计算多样性指数，理解指标怎么算出来的。
+    caution: 偏研究用途，文档面向已有基础的使用者。
+
+  - repo: geopandas/geopandas
+    title: GeoPandas 地理数据处理
+    lang: en
+    kind: tool
+    points: [mid-geo-01, mid-geo-05, hi-geo-04]
+    what: 在 Python 里处理带坐标的地理数据与地图。
+    how: 把经纬度、人口、气候数据画成图。地理的结论常常先看图才能看出来。
+    caution: 坐标系转换（投影）是最大坑点，算距离前必须确认用的是哪个投影。
+
+  - repo: qgis/QGIS
+    title: QGIS 地理信息系统
+    lang: zh
+    kind: tool
+    points: [mid-geo-01, hi-geo-03]
+    what: 完整的开源 GIS 桌面软件，做地图、空间分析与制图。
+    how: 大学段地理相关实验的标准工具。装简体中文界面后从加载一张底图开始。
+    caution: 功能极多，容易迷失。先定一个小任务（如画一张人口密度图）再学。
+
+  - repo: OSGeo/grass
+    title: GRASS GIS 地理处理引擎
+    lang: en
+    kind: tool
+    points: [hi-geo-03]
+    what: 老牌地理空间分析引擎，擅长栅格与地形分析。
+    how: 需要做地形、流域、坡度的定量分析时用它。
+    caution: 命令行与模块体系较陡，日常制图用 QGIS 更省力。
+
+  - repo: GenericMappingTools/gmt
+    title: GMT 通用制图工具
+    lang: en
+    kind: tool
+    points: [mid-geo-02, hi-geo-03]
+    what: 地学领域通用的高精度制图与数据处理工具。
+    how: 画地震分布、洋流、地形剖面这类地球科学图时的常用工具。
+    caution: 命令行工具，语法陡峭。学术绘图质量高但学习投入大。
+
+  - repo: Unidata/MetPy
+    title: MetPy 气象数据处理
+    lang: en
+    kind: tool
+    points: [mid-geo-03, hi-geo-02]
+    what: 读取与分析气象数据、计算大气物理量的工具库。
+    how: 学大气环流时，用真实探空数据画一张温度随高度变化的图。
+    caution: 需要气象数据源与坐标规范的前置知识。
+
+  - repo: astropy/astropy
+    title: Astropy 天文学工具
+    lang: en
+    kind: tool
+    points: [hi-phy-05]
+    what: 天文计算与坐标转换的标准库。
+    how: 算行星位置、恒星坐标时用它，顺带理解坐标系转换与时间标准。
+    caution: 面向天文专业，纯物理学习用不到时可跳过。
+
+  # ---------------------------------------------------------------- 课程资料（许可证需注意）
+  - repo: QSCTech/zju-icicles
+    title: 浙江大学课程攻略共享计划
+    lang: zh
+    kind: course_list
+    points: [uni-cal-01, uni-lin-01, uni-pro-01]
+    what: 学生整理的浙大课程资料，含课件、试卷与复习笔记。
+    how: 大学段找中文考试范围与往年题时用。它的价值在题型与范围，不在讲解质量。
+    caution: 仓库未声明许可证，材料中包含可能有版权的课件与试卷。个人学习参考，不要转载或再分发。
+
+  - repo: PKUanonym/REKCARC-TSC-UHT
+    title: 清华计算机系课程攻略
+    lang: zh
+    kind: course_list
+    points: [uni-dis-01, uni-com-01]
+    what: 清华计算机系课程的资料与经验整理，含作业与实验。
+    how: 想了解“一门课真正要求到什么程度”时看它的作业与实验说明。
+    caution: 同上，材料版权状态复杂。只作个人学习参考。
+
+  - repo: lib-pku/libpku
+    title: 北大课程资料整理
+    lang: zh
+    kind: course_list
+    points: [uni-cal-01]
+    what: 学生整理的北大课程资料集合。
+    how: 当作中文资料的另一个入口。
+    caution: 最后更新 2022 年，且未声明许可证。时效与授权都需要自行判断。
+
+  - repo: USTC-Resource/USTC-Course
+    title: 中科大课程资源
+    lang: zh
+    kind: course_list
+    points: [uni-cal-01, uni-phy-01]
+    what: 中科大课程资料集合，物理与数学类材料较多。
+    how: 找中文物理与数学课程材料时用。
+    caution: 未声明许可证，且更新较慢。
+
+  # ---------------------------------------------------------------- 反例与自检
+  - repo: Khan/khan-exercises
+    title: Khan Academy 旧版习题框架（已弃用）
+    lang: en
+    kind: practice
+    points: []
+    what: 可汗学院早期的习题框架，已停止维护。
+    how: 唯一用途是了解“带即时反馈的数学练习系统”是怎么实现的。
+    caution: 已归档且官方标注弃用。不要把它的链接当作可用的练习入口——这正是本仓库要求标注状态的原因，留着它当反例。

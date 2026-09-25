@@ -1,0 +1,379 @@
+# 小学 · 1-6 年级
+#
+# 写法约定（全仓库一致，validate.py 会检查）：
+#   kid       一年级版：极简直白，句子短，用身边的东西打比方。允许不严谨。
+#   principle 第一性原理：这一条最根本的那句话。去掉它，后面的内容就散架。
+#   model     与世界模型／勘境的连接：这条知识在"理解世界如何运作"里担任什么角色。
+#   exit      出口标准：不是"学过"，而是能不看答案做出来、讲出来。
+#   video     q 是检索关键词（拼成永不失效的检索链接）；c 是 data/links.yaml 里的资源 key。
+
+stage_id: primary
+
+units:
+  # ================================================================ 数学
+  - subject_id: math
+    why: >
+      小学数学只有一件事：把“看得见的东西”翻译成“能算的东西”，再翻译回去。
+      习惯不好时，孩子会以为数学就是记规则——那正是后面学不动的真正原因。
+
+    points:
+      - id: pri-math-01
+        title: 数与计数
+        grade: 一年级
+        core: true
+        strand: number
+        kid: 数东西的时候，用手指一个一个点过去，点到最后那个数，就是“一共有几个”。
+        principle: >
+          “有多少”不需要数也能比：把两堆东西一对一摆好，谁剩下，谁就多。
+          数只是给“一样多”这件事起了个名字。
+        model: 世界模型的第一层也只做一件事——把眼前的情形压成几个数。压不出来，后面全免谈。
+        exit: 能数清 20 个东西，并说清“第 3 个”和“3 个”哪里不一样。
+        video:
+          q: [一年级 数学 数一数 微课, counting to 20 for kids]
+          c: [smartedu, khan-zh]
+
+      - id: pri-math-02
+        title: 加减乘除与位值
+        grade: 一至三年级
+        core: true
+        strand: number
+        kid: 加是把两堆合起来，减是拿走一堆。十个手指头不够用，就往左边写一位，左边一格顶十个。
+        principle: >
+          十进制是“按十打包”的约定。因为打包，无限多的数只需要十个符号。
+        model: 用有限符号表示无限情形，是一切表示法的共同难题，数字是人类的第一个成功答案。
+        exit: 会做进位加与退位减，并能解释为什么同一个“3”写在十位上就大十倍。
+        prereq: [pri-math-01]
+        video:
+          q: [一年级 数学 进位加法 讲解, place value tens and ones]
+          c: [smartedu, khan-math]
+
+      - id: pri-math-03
+        title: 分数与小数
+        grade: 三年级
+        core: true
+        strand: number
+        kid: 一块饼切成 4 份，吃 1 份就是四分之一。切得越多，每份越小，合起来还是那块饼。
+        principle: >
+          分数的本质是“把整体分成等份”这个动作，不是一种新数。
+          分母说分成几份，分子说要几份。
+        model: 把整体切成可比较的份，是“归一化”的雏形。模型里所有可比性都来自某种归一化。
+        exit: 会画图比较 1/3 与 1/4，并说清为什么分母大的反而小。
+        video:
+          q: [三年级 数学 分数的初步认识, fractions for kids visual]
+          c: [smartedu, khan-math]
+
+      - id: pri-math-04
+        title: 图形与度量
+        grade: 二至五年级
+        core: false
+        strand: number
+        kid: 长度用小尺子量，面积用方块铺满数格子。同样多的水倒进细杯子会显得高，其实没变多。
+        principle: >
+          长度是一维、面积是二维、体积是三维。度量必须先统一单位，否则两个数不可比。
+        model: 度量是“把世界映射成数”的第一步，也第一次出现“换个坐标系，事实不变”。
+        exit: 能举例说明周长变大不等于面积变大。
+        video:
+          q: [三年级 数学 面积 单位, area and perimeter difference]
+          c: [smartedu, phet]
+
+      - id: pri-math-05
+        title: 比例与百分数
+        grade: 六年级
+        core: true
+        strand: number
+        kid: 买 2 个 8 元，买 4 个就该 16 元。百分号就是把“一百份里的几份”写短一点。
+        principle: >
+          比例是“两个量的变化保持同步”。它是人类最早的外推工具——用它推算没见过的情况。
+        model: 外推能力来自结构假设。世界模型能预测没见过的未来，根子上是同一条。
+        exit: 会用“每份多少”算任意份数，并能说清为什么先涨价再打折不等于原价。
+        prereq: [pri-math-03]
+        video:
+          q: [六年级 数学 百分数 折扣, ratios and percentages basics]
+          c: [smartedu, khan-math]
+
+      - id: pri-math-06
+        title: 用字母表示数
+        grade: 五年级
+        core: true
+        strand: symbol
+        kid: 一个还不知道的数，先给它起个名字叫 x，等以后再算出来。x 像一个空盒子，谁都能放进去。
+        principle: >
+          用符号代替未知数，等于把“关于所有数的一句话”变成一行式子，
+          于是推理不再依赖具体例子。
+        model: 泛化写法让一个结论覆盖无穷多情形，这是“模型”与“记录”的分界线。
+        exit: 能把“某数乘 3 再加 2 等于 11”写成式子并解出来。
+        video:
+          q: [五年级 数学 用字母表示数, algebra basics variables]
+          c: [smartedu, khan-math]
+
+  # ================================================================ 语文
+  - subject_id: chinese
+    why: >
+      语文在小学的任务不是作文分，是“把意思准确地搬进别人脑子”。
+      这件事做不好，以后所有学科都会以“读不懂题”的形式还回来。
+
+    points:
+      - id: pri-chn-01
+        title: 字形与部首
+        grade: 一至二年级
+        core: true
+        strand: symbol
+        kid: 汉字像小图画拼起来的。“氵”三点是水，所以江、河、湖都跟水有关。
+        principle: >
+          形声字里一部分提示意思（形旁），一部分提示读音（声旁）。
+          识字不是死记，是拆开认零件，再拼回去。
+        model: 用少量零件组合出大量对象，是“生成式表示”最早的范例。
+        exit: 见到不认识的字，能说出它大概跟什么有关。
+        video:
+          q: [一年级 语文 偏旁部首 识字, 汉字 形声字 讲解]
+          c: [smartedu, zdic]
+
+      - id: pri-chn-02
+        title: 朗读与标点
+        grade: 一至三年级
+        core: false
+        strand: symbol
+        kid: 读句子要像说话一样停顿，逗号停一下，句号停久一点，问号声音往上走。
+        principle: 标点是呼吸的记号。读得顺，说明你把句子正确切分了。
+        model: 切分是理解的第一步。长句读不懂，常常不是词不认识，是层级切错了。
+        exit: 能照着标点的停顿朗读一段话，并说出每处标点为什么在那里。
+        video:
+          q: [小学 语文 朗读 停顿 标点符号 微课]
+          c: [smartedu]
+
+      - id: pri-chn-03
+        title: 句子的骨架
+        grade: 二至四年级
+        core: true
+        strand: symbol
+        kid: 一句话常常是“谁 + 做什么”。先找到这两个，句子就站起来了。
+        principle: 主谓宾是最小骨架，其余成分是挂在骨架上的修饰。能删到只剩骨架，才算读懂。
+        model: 找骨架就是抽主干，与从一堆输入里提取状态是同一件事。
+        exit: 能把一个长句删成只留主干，且意思不矛盾。
+        video:
+          q: [小学 语文 缩句 主谓宾 讲解]
+          c: [smartedu]
+
+      - id: pri-chn-04
+        title: 段落与复述
+        grade: 三至五年级
+        core: true
+        strand: symbol
+        kid: 一段话讲一件事。读完一段，用自己的话说一句“这段讲了什么”。
+        principle: >
+          概括是把长文压成短表示，压缩后主旨还得在。压缩一定有损失，要能说出丢了什么。
+        model: 摘要就是有损压缩。世界模型对状态的提取，同样是一边丢细节、一边保住预测力。
+        exit: 读完一篇课文，能用三句话说清全篇，并指出自己省掉了哪些细节。
+        video:
+          q: [小学 语文 概括 段落大意 方法]
+          c: [smartedu]
+
+      - id: pri-chn-05
+        title: 比喻与说明
+        grade: 三至六年级
+        core: true
+        strand: cause
+        kid: “月亮像盘子”是比喻，因为月亮不是盘子，只是像。“水到 100 度会开”是说明，因为它就是真的。
+        principle: >
+          比喻传递的是关系结构，不是事实等价。把比喻当事实用，是思维错误的第一大来源。
+        model: 类比能迁移结构，也能伪造证据。任何解释都要能分成“像”和“是”两类。
+        exit: 能在一篇科普文章里圈出所有比喻，并各说一句“它像在哪儿、不像在哪儿”。
+        video:
+          q: [小学 语文 比喻 拟人 说明方法]
+          c: [smartedu]
+
+  # ================================================================ 英语
+  - subject_id: english
+    why: >
+      小学英语只需要做到一件事：把声音和东西直接连起来，中间不要过中文。
+      过了中文，语速一快就断。这是后来听力差的最常见原因。
+
+    points:
+      - id: pri-eng-01
+        title: 字母与发音（自然拼读）
+        grade: 一至二年级
+        core: true
+        strand: symbol
+        kid: 英语单词是用字母的“声音”拼出来的，看到 cat 就知道怎么读。
+        principle: >
+          英文拼写与读音有规律但**不完全**对应。自然拼读覆盖大部分常用词，
+          剩下的要单独记，不要假设规律永远成立。
+        model: 任何映射法则都有例外。知道法则的适用边界，比知道法则本身更重要。
+        exit: 能拼读没见过的简单词，并说出自己不确定的那些。
+        video:
+          q: [小学 英语 自然拼读 字母组合, phonics for beginners]
+          c: [smartedu, khan-zh]
+
+      - id: pri-eng-02
+        title: 高频词与基本句型
+        grade: 一至三年级
+        core: true
+        strand: symbol
+        kid: 英语里最常用的词就那几百个，先学会它们，就能说很多话。
+        principle: >
+          语言使用频率极度不均匀：少数高频词覆盖大部分日常句子。
+          先攻高频，是用最小记忆换最大可用度的策略。
+        model: 长尾分布是世界的常见形状。把力气花在头部，是通用的效率原则。
+        exit: 能用 100 个高频词说清今天做了什么。
+        video:
+          q: [小学 英语 高频词 句型, sight words practice]
+          c: [smartedu, khan-zh]
+
+      - id: pri-eng-03
+        title: 时态的直觉
+        grade: 三至六年级
+        core: true
+        strand: change
+        kid: 已经发生的事加 -ed，正在发生的事加 -ing，还没发生的用 will。
+        principle: >
+          时态是给动词盖的时间戳。先有时间线，再记形式；
+          反过来先背形式，就会一直混。
+        model: 时间是状态序列的坐标。给状态打时间戳，才能谈“预测”这个词。
+        exit: 能画一条时间线，把一件过去的事、正在做的事、将要做的事各放一个位置。
+        video:
+          q: [小学 英语 一般过去时 一般将来时 讲解, English tenses for kids]
+          c: [smartedu, khan-zh]
+
+      - id: pri-eng-04
+        title: 听说先于读写
+        grade: 一至六年级
+        core: true
+        strand: symbol
+        kid: 先听懂一句话，再学着说这句话，最后才写下来。顺序反了会很吃力。
+        principle: >
+          语言能力按“输入→输出”顺序建立。听读是输入，说写是输出，
+          输入量不足时输出只能靠翻译，且永远慢一拍。
+        model: 先有观察，才有预测。输入不足的模型只能背答案，不能生成。
+        exit: 能听懂一段三句话的日常对话，并原样复述。
+        video:
+          q: [小学 英语 听力 跟读 每日练习, daily English listening for kids]
+          c: [smartedu, khan-zh]
+
+  # ================================================================ 科学
+  - subject_id: science
+    why: >
+      小学科学不是提前学物理化学，而是练两件事：把观察写下来，以及区分
+      “我看到什么”和“我以为是什么”。这两件事是全部科学研究的地基。
+
+    points:
+      - id: pri-sci-01
+        title: 观察与记录
+        grade: 一至三年级
+        core: true
+        strand: cause
+        kid: 看一盆豆子每天长多少，量一量写在本子上。写下来才算知道，记在脑子里会骗自己。
+        principle: >
+          观察必须留下可复查的记录。不写下来，人会自动把后来的想法当成当初的观察。
+        model: 没有记录的观察不能作为证据。这是本组织全部证据规则的最小版本。
+        exit: 连续记录同一个东西七天，每天一个数，并能画出它变化的走向。
+        video:
+          q: [小学 科学 观察记录 实验日记, science observation for kids]
+          c: [smartedu, phet]
+
+      - id: pri-sci-02
+        title: 物质的三态
+        grade: 二至四年级
+        core: true
+        strand: structure
+        kid: 冰化了变水，水烧开变汽。东西没变，只是它的小颗粒站得松了、跑得快了。
+        principle: >
+          温度改变的是颗粒运动的剧烈程度，不是物质本身。
+          同一堆颗粒，运动方式不同，整体表现就完全不同。
+        model: 宏观行为可以从微观单元的运动规则推出来。这是“从局部规则到整体现象”的第一课。
+        exit: 能说清水结冰后为什么体积反而变大。
+        video:
+          q: [小学 科学 水的三态变化, states of matter for kids]
+          c: [smartedu, phet]
+
+      - id: pri-sci-03
+        title: 力与运动（推、拉、摩擦）
+        grade: 二至四年级
+        core: true
+        strand: energy
+        kid: 推小车它就动，不推它就慢慢停。地面越粗糙，停得越快。
+        principle: >
+          物体不会自己改变速度。看起来“自己停下来”，是因为有摩擦在往后拉它。
+        model: 分清“作用”与“阻力”，是理解一切运动变化的前提。
+        exit: 能预测同一辆车在光滑地面和粗糙地面哪边走得远，并说出理由。
+        video:
+          q: [小学 科学 摩擦力 实验, force and motion for kids]
+          c: [smartedu, phet]
+
+      - id: pri-sci-04
+        title: 光与影、昼与夜
+        grade: 一至三年级
+        core: false
+        strand: scale
+        kid: 光走直线，挡住就出影子。地球自己转圈，转过太阳这边是白天，转过那边是黑夜。
+        principle: >
+          影子的形状由光源与遮挡物的几何关系决定。
+          昼夜不是太阳在动，是我们在转——同一现象两种说法，只有一种与观测一致。
+        model: 换参照系能解释同一现象，但只有能预测新观测的那个才是正确的。
+        exit: 能用一盏灯和一个球演示昼夜，并预测把手电向左移影子往哪边动。
+        video:
+          q: [小学 科学 影子 光的直线传播, day and night for kids]
+          c: [smartedu, phet]
+
+      - id: pri-sci-05
+        title: 生物与环境（食物链）
+        grade: 三至六年级
+        core: true
+        strand: system
+        kid: 兔子吃草，狐狸吃兔子。少了一样，一整串都会乱。
+        principle: >
+          能量沿食物链单向传递，每过一层大部分被消耗掉，所以顶层数量天然少。
+        model: 系统的连锁反应不是加法。抽掉一个环节，受影响的是整个网络的形状。
+        exit: 能画出一条食物链，并说出抽掉中间一环后三种可能的后果。
+        video:
+          q: [小学 科学 食物链 食物网, food chain for kids]
+          c: [smartedu, khan-science]
+
+  # ================================================================ 社会与常识
+  - subject_id: society
+    why: >
+      社会常识回答孩子最早问的那类问题：时间怎么走、路怎么认、钱为什么能用。
+      这些是“世界为什么这样运行”的人造部分。
+
+    points:
+      - id: pri-soc-01
+        title: 时间与历法
+        grade: 一至三年级
+        core: false
+        strand: scale
+        kid: 一天有 24 小时，一年有 365 天。日历是把日子排好队，好让大家说的话是同一个意思。
+        principle: >
+          历法是人为约定，用来给事件排先后。闰年是为了修补“天数不是整数”这个事实。
+        model: 给事件编号，才能比较、排序、推测。时间戳是任何序列模型的前提。
+        exit: 能算出两个月之间有多少天，并解释为什么会有闰年。
+        video:
+          q: [小学 数学 年月日 平年闰年]
+          c: [smartedu]
+
+      - id: pri-soc-02
+        title: 地图与方位
+        grade: 二至四年级
+        core: true
+        strand: scale
+        kid: 地图就是从上往下看的照片，缩小了很多倍。地图上北边通常朝上。
+        principle: >
+          地图是按固定比例尺把三维世界压成二维。压的过程一定丢信息（高度、弯曲），
+          所以看地图要问“它丢了什么”。
+        model: 一切表示都是带损失的投影。知道损失在哪，才知道结论能用在哪。
+        exit: 能根据地图说出两点间的方向与大概距离，并指出地图没告诉你的信息。
+        video:
+          q: [小学 数学 位置与方向 地图比例尺]
+          c: [smartedu]
+
+      - id: pri-soc-03
+        title: 交换与货币
+        grade: 三至六年级
+        core: true
+        strand: system
+        kid: 我有一支笔，你有一块橡皮，换着用都更好。钱是大家都认的“中间物”。
+        principle: >
+          以物易物要求“双方都正好需要对方的东西”，货币通过把需求拆成两半解决了这个问题。
+        model: 引入一个公共中介能大幅降低协调成本。这是系统设计的通用手法。
+        exit: 能说清为什么有了钱，交易会变得容易，并指出钱本身不值钱在哪。
+        video:
+          q: [小学 道德与法治 货币 交换 是怎么来的, what is money for kids]
+          c: [smartedu, khan-zh]

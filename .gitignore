@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# 链接检查的临时产物：报告会写进 docs/ 与 data/，中间缓存不入库
+.tmp/
+links-check-raw.json
